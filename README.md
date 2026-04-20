@@ -25,3 +25,4 @@ Este proyecto permite llevar un control detallado del flujo de dinero. El sistem
 
 
 ## Figma
+https://www.figma.com/make/QGWMhhF3VRblFyQ9C3J59f/Gastos-mensuales-app?fullscreen=1&t=wlwmIbuX7rS17UzD-1&preview-route=%2Fcomparison
