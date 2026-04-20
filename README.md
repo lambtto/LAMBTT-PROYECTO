@@ -12,7 +12,6 @@ Este proyecto permite llevar un control detallado del flujo de dinero. El sistem
 - **Alertas de Presupuesto:** Configuración de límites personalizados. Si un gasto hace que se supere el límite, el sistema bloquea o advierte con el monto excedido.
 - **Validación Estricta:** Si se ingresa un monto con formato inválido, el sistema rechaza el registro y muestra un error de validación sin afectar los datos guardados.
 - **Estados Vacíos Limpios:** Si no hay actividad, la interfaz oculta los gráficos y muestra claramente el mensaje "Sin gastos registrados este mes".
-----
 
 
 ## Integrantes y Roles del equipo
@@ -24,3 +23,5 @@ Este proyecto permite llevar un control detallado del flujo de dinero. El sistem
 |Felipe Hernandez|Developer    |
 |Vicente Coiro   |Developer    |
 
+
+## Figma
