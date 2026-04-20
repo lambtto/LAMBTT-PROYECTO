@@ -1,7 +1,8 @@
-# Lil Bern: orniganizador de entrenamiento
-## Como funciona:
-La app Lil Bern.....
+# Lil Bern: orniganizador de entrenamiento 
+## Como funciona: esta app.....
+
 ----
+
 
 ## Integrantes y Roles del equipo
 |Nombre          |Rol          |
@@ -11,3 +12,4 @@ La app Lil Bern.....
 |Martin Herrera  |Developer    |
 |Felipe Hernandez|Developer    |
 |Vicente Coiro   |Developer    |
+
