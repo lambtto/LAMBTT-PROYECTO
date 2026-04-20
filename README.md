@@ -15,7 +15,7 @@ Este proyecto permite llevar un control detallado del flujo de dinero. El sistem
 - **Validación Estricta:** Si se ingresa un monto con formato inválido, el sistema rechaza el registro y muestra un error de validación sin afectar los datos guardados.
 - **Estados Vacíos Limpios:** Si no hay actividad, la interfaz oculta los gráficos y muestra claramente el mensaje "Sin gastos registrados este mes".
 
-##Historias de Usuario
+## Historias de Usuario
 | ID   | Nombre                                          | Issue  | 
 |------|-------------------------------------------------|--------| 
 | US-01 | Registro de gasto individual                   | #1     | 
@@ -41,4 +41,4 @@ Este proyecto permite llevar un control detallado del flujo de dinero. El sistem
 
 
 ## Figma
-https://www.figma.com/make/QGWMhhF3VRblFyQ9C3J59f/Gastos-mensuales-app?fullscreen=1&t=wlwmIbuX7rS17UzD-1&preview-route=%2Fcomparison
+https://www.figma.com/make/8a6hWw3p87KKdgCpop1Am1/Gastos-mensuales-app?fullscreen=1&t=4Y3ODySBsILzqNbw-1&preview-route=%2Fbudget
