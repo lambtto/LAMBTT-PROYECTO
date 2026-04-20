@@ -15,6 +15,20 @@ Este proyecto permite llevar un control detallado del flujo de dinero. El sistem
 - **Validación Estricta:** Si se ingresa un monto con formato inválido, el sistema rechaza el registro y muestra un error de validación sin afectar los datos guardados.
 - **Estados Vacíos Limpios:** Si no hay actividad, la interfaz oculta los gráficos y muestra claramente el mensaje "Sin gastos registrados este mes".
 
+##Historias de Usuario
+| ID   | Nombre                                          | Issue  | 
+|------|-------------------------------------------------|--------| 
+| US-01 | Registro de gasto individual                   | #1     | 
+| US-02 | Visualizacion de resumen mensual               | #2     | 
+| US-03 | Establecimiento de presupuesto mensual personal| #3     | 
+| US-04 | Edición y eliminación de un gasto registrado   | #4     | 
+| US-05 | Exportación de gastos en PDF o Excel           | #5     | 
+| US-07 | Registro de gasto compartido del hogar         | #7     | 
+| US-08 | Visualización del gasto total familiar del mes | #8     | 
+| US-09 | Establecimiento de presupuesto familiar mensual| #9     | 
+| US-10 | Comparación de gastos entre meses              | #10    | 
+| US-11 | Gestión de integrantes del grupo familiar      | #11    | 
+
 
 ## Integrantes y Roles del equipo
 |Nombre          |Rol          |
