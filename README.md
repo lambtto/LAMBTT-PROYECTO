@@ -1,13 +1,13 @@
-# Proyecto
-Descripción del Proyecto
-
+# Lil Bern: orniganizador de entrenamiento
+## Como funciona:
+La app Lil Bern.....
 ----
 
 ## Integrantes y Roles del equipo
-|Nombre         |Rol          |
-|---------------|-------------|
-|Paulo Salas    |Scrum Master |
-|Simon Reyes    |Product Owner|
-|Martin Herrera |Developer    |
-|Felipe         |Developer    |
-|Vicente Coiro  |Developer    |
+|Nombre          |Rol          |
+|----------------|-------------|
+|Paulo Salas     |Scrum Master |
+|Simon Reyes     |Product Owner|
+|Martin Herrera  |Developer    |
+|Felipe Hernandez|Developer    |
+|Vicente Coiro   |Developer    |
