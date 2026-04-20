@@ -156,68 +156,8 @@ quedar sin ser abordado.]
 
 Ejemplo: ![Diagrama de Arquitectura](./diagrama_arquitectura.png)] 
 
- 
-
-## 3. Descomposición Modular 
 
  
-
-Fundamentación: [Criterio de descomposición: por dominio, capa, funcionalidad, etc.] 
-
- 
-
-### Módulo 1: [Nombre] 
-
-- Responsabilidad: [qué hace este módulo] 
-
-- Ofrece a otros módulos: [interfaces o datos que expone] 
-
-- Depende de: [módulos de los que consume servicios] 
-
- 
-
-### Módulo 2: [Nombre] 
-
-- Responsabilidad: [qué hace este módulo] 
-
-- Ofrece a otros módulos: [interfaces o datos que expone] 
-
-- Depende de: [módulos de los que consume servicios] 
-
- 
-
-### Módulo N: [Nombre] 
-
-- Responsabilidad: ... 
-
-- Ofrece a otros módulos: ... 
-
-- Depende de: ... 
-
- 
-
-## 4. Decisiones de Diseño 
-
- 
-
-### Decisión 1 
-
-- Decisión: [qué se decide] 
-
-- Motivación: [por qué, referenciando REF si aplica] 
-
-- Alternativas consideradas: [qué otras opciones se evaluaron] 
-
-- Impacto: [en qué módulos o REF afecta] 
-
---- 
-
- 
-
-PLACEHOLDER_REMOVE2 
-
- 
-
 ## Responsabilidades del Equipo 
 
 | Integrante     | Rol         | Ítems de la rúbrica a cargo| 
