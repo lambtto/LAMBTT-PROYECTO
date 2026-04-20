@@ -1,6 +1,8 @@
-# Control de Gastos Personales 
+# GastApp Registro y Control de Gastos Mensuales
 
-Una aplicación diseñada para registrar gastos diarios, visualizar resúmenes mensuales mediante gráficos y ayudar a los usuarios a entender sus hábitos de consumo para tomar mejores decisiones financieras.
+GastApp nació de una necesidad bastante concreta: llevar un registro de en qué se va la plata cada mes. Ya sea solo o en familia, la idea es tener todo en un mismo lugar sin complicaciones.
+La app permite anotar gastos, asignarles una categoría, ver cuánto llevas gastado en el mes y comparar con meses anteriores. También tiene una parte pensada para grupos familiares, donde todos los integrantes pueden ver y registrar gastos del hogar de forma compartida.
+No es una app de contabilidad ni nada sofisticado, es algo práctico para el día a día.
 
 ##  Descripción
 Este proyecto permite llevar un control detallado del flujo de dinero. El sistema procesa ingresos categorizados, valida la información en tiempo real, genera reportes visuales de distribución de gastos y emite alertas cuando el usuario supera sus propios límites presupuestarios.
