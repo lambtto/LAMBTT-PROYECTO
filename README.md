@@ -1,11 +1,11 @@
-# Control de Gastos Personales 💸📊
+# Control de Gastos Personales 
 
 Una aplicación diseñada para registrar gastos diarios, visualizar resúmenes mensuales mediante gráficos y ayudar a los usuarios a entender sus hábitos de consumo para tomar mejores decisiones financieras.
 
-## 📋 Descripción
+##  Descripción
 Este proyecto permite llevar un control detallado del flujo de dinero. El sistema procesa ingresos categorizados, valida la información en tiempo real, genera reportes visuales de distribución de gastos y emite alertas cuando el usuario supera sus propios límites presupuestarios.
 
-## 🚀 Características Principales
+##  Características Principales
 
 - **Registro Inmediato:** Ingreso de gastos con monto, categoría y descripción opcional. El sistema guarda la fecha actual y actualiza el resumen del día al instante.
 - **Análisis Mensual:** Visualización del total gastado por categoría y cálculo automático del porcentaje que representa sobre el gasto total del mes.
