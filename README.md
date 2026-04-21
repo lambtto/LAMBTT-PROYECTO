@@ -43,6 +43,7 @@ ver:[modelo-dominio.md](./modelo-dominio.md)
 Enlace de figma: https://www.figma.com/make/8a6hWw3p87KKdgCpop1Am1/Gastos-mensuales-app?fullscreen=1&t=4Y3ODySBsILzqNbw-1&preview-route=%2Fbudget
 
 | Mockup | Historia de usuario relacionada | 
+|--------|-------------------------------------------------|------------------| 
 |--------|[#Issue 1](https://github.com/lambtto/LAMBTT-PROYECTO/issues/1)| 
 |--------|[#Issue 2](https://github.com/lambtto/LAMBTT-PROYECTO/issues/2)| 
 |--------|[#Issue 3](https://github.com/lambtto/LAMBTT-PROYECTO/issues/3)| 
