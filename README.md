@@ -44,7 +44,7 @@ Ver: [ReqExtrafuncionales.md](./ReqExtrafuncionales.md)
 
 | Mockup | Historia de usuario relacionada | 
 |--------|------------| 
-|(https://www.figma.com/make/8a6hWw3p87KKdgCpop1Am1/Gastos-mensuales-app?fullscreen=1&t=4Y3ODySBsILzqNbw-1&preview-route=%2Fbudget)| US-XX | 
+|(https://www.figma.com/make/8a6hWw3p87KKdgCpop1Am1/Gastos-mensuales-app?fullscreen=1&t=4Y3ODySBsILzqNbw-1&preview-route=%2Fbudget)| TODAS | 
 
 ## Diseño Arquitectónico 
 
