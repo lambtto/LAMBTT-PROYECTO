@@ -39,7 +39,7 @@ La separación en módulos independientes (Usuario, Finanzas, Presupuestos) perm
 #### Portabilidad (Requisito de Prioridad Media)
 Al utilizar una capa de presentación basada en Vite + React y una comunicación vía HTTPS/JSON, el sistema garantiza que la experiencia del usuario sea consistente tanto en navegadores de escritorio como en dispositivos móviles, permitiendo el registro de gastos en cualquier lugar.
 
-## Definicón de Módulos
+## Definición de Módulos
 ### Módulo de Usuario/Familiar
 #### Responsabilidad:
 -Gestión de identidad y autenticación de usuarios individuales.
