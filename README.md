@@ -45,59 +45,9 @@ Ver: [ReqExtrafuncionales.md](./ReqExtrafuncionales.md)
 
 |--------|----------------------------------| 
 
-| (https://www.figma.com/make/8a6hWw3p87KKdgCpop1Am1/Gastos-mensuales-app?fullscreen=1&t=4Y3ODySBsILzqNbw-1&preview-route=%2Fbudget) | US-XX | 
+|(https://www.figma.com/make/8a6hWw3p87KKdgCpop1Am1/Gastos-mensuales-app?fullscreen=1&t=4Y3ODySBsILzqNbw-1&preview-route=%2Fbudget)| US-XX | 
 
  
-
-## Diseño Arquitectónico 
-
-Ver: [Arquitectura.md](./Arquitectura.md) 
-
-Ver archivo: Arquitectura.md (ver template a continuación) 
-
- 
-
---- 
-
-### Template: Arquitectura.md 
-
- 
-
-## 1. Estilo Arquitectónico 
-
- 
-
-Estilo adoptado: [nombre del estilo, ej: Cliente-Servidor, Capas, etc.] 
-
- 
-
-Justificación basada en REF priorizados: 
-
- 
-
-| REF ID | Descripción                              | Prioridad | Cómo lo aborda el estilo      | 
-
-|--------|------------------------------------------|-----------|-------------------------------| 
-
-| REF-01 | [descripción]                            | Alta      | [explicación]                 | 
-
-| REF-02 | [descripción]                            | Alta      | [explicación]                 | 
-
- 
-
-Explicación textual: [Describir por qué el estilo elegido es el más adecuado 
-
-considerando los REF de alta prioridad. Ningún REF de alta prioridad puede 
-
-quedar sin ser abordado.] 
-
- 
-
-## 2. Diagrama de Arquitectura 
-
-Ejemplo: ![Diagrama de Arquitectura](./diagrama_arquitectura.png)] 
-
-
  
 ## Responsabilidades del Equipo 
 
