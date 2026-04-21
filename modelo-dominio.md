@@ -10,9 +10,10 @@ GrupoFamiliar → id, nombre, administrador
 Reporte → id, mes, año, formato
 
 Relaciones:
-
-Usuario 1 ——< 0..* Gasto
-Usuario 0..* >—— 1 GrupoFamiliar
-Gasto 0..* >—— 1 Categoria
-GrupoFamiliar 1 ——< 0..* Presupuesto
-Usuario 1 ——< 0..* Reporte
+|-------------------------------------|
+|Usuario 1 ——< 0..* Gasto             |
+|Usuario 0..* >—— 1 GrupoFamiliar     |
+|Gasto 0..* >—— 1 Categoria           |
+|GrupoFamiliar 1 ——< 0..* Presupuesto |
+|Usuario 1 ——< 0..* Reporte           |
+|-------------------------------------|
