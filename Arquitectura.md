@@ -66,8 +66,8 @@ Al utilizar una capa de presentación basada en Vite + React y una comunicación
 - CUENTA: id, nombre_cuenta, saldo_inicial, saldo_actual, moneda.
 
 #### Interacción con otros módulos:
--Con Usuario: Verifica que el usuario tenga permisos de escritura en la cuenta o grupo familiar antes de guardar.
--Con Presupuestos: Notifica cada nuevo gasto registrado para que el presupuesto mensual se actualice y se reste del disponible.
+- Con Usuario: Verifica que el usuario tenga permisos de escritura en la cuenta o grupo familiar antes de guardar.
+- Con Presupuestos: Notifica cada nuevo gasto registrado para que el presupuesto mensual se actualice y se reste del disponible.
 
 ### Módulo de Presupuestos
 
