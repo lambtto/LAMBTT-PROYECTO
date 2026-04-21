@@ -22,11 +22,11 @@ Este proyecto permite llevar un control detallado del flujo de dinero. El sistem
 | US-03 | Establecimiento de presupuesto mensual personal| #3     | 
 | US-04 | Edición y eliminación de un gasto registrado   | #4     | 
 | US-05 | Exportación de gastos en PDF o Excel           | #5     | 
-| US-07 | Registro de gasto compartido del hogar         | #7     | 
-| US-08 | Visualización del gasto total familiar del mes | #8     | 
-| US-09 | Establecimiento de presupuesto familiar mensual| #9     | 
-| US-10 | Comparación de gastos entre meses              | #10    | 
-| US-11 | Gestión de integrantes del grupo familiar      | #11    | 
+| US-06 | Registro de gasto compartido del hogar         | #7     | 
+| US-07 | Visualización del gasto total familiar del mes | #8     | 
+| US-08 | Establecimiento de presupuesto familiar mensual| #9     | 
+| US-09 | Comparación de gastos entre meses              | #10    | 
+| US-10 | Gestión de integrantes del grupo familiar      | #11    | 
 
  
 
