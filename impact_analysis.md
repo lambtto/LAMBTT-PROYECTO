@@ -1,4 +1,4 @@
-# Descripción del cambio soliciado
+# 1. Descripción del cambio soliciado
 
 ## Cambio funcional:
 Se requiere integrar con 3 bancos distintos para conciliar automáticamente los gastos con movimientos bancarios reales, cada banco con su propia API, formato y frecuencia de actualizacíon.
@@ -6,39 +6,154 @@ Se requiere integrar con 3 bancos distintos para conciliar automáticamente los 
 ## Cambio no funcional:
 El módulo de integracion bancaria debe operar con SLA de disponibilidad del 99.9% independiente del resto de la app, y recibir actualizaciones de seguridad sin redesplegar la aplicacíon completa.
 
----
+## 2. Nuevas historias de usuario:
 
-## Análisis de impacto:
-....
+### US-01: [nombre] 
+
+Como [actor], 
+
+quiero [acción], 
+
+para [beneficio]. 
+
+Criterios de aceptación: 
+
+- CA1: ... 
+
+- CA2: ... 
+
+### US-02: [nombre] 
+
+Como [actor], 
+
+quiero [acción], 
+
+para [beneficio]. 
+
+Criterios de aceptación: 
+
+- CA1: ... 
+
+- CA2: ...
+
+### US-03: [nombre] 
+
+Como [actor], 
+
+quiero [acción], 
+
+para [beneficio]. 
+
+Criterios de aceptación: 
+
+- CA1: ... 
+
+- CA2: ... 
+-----
+
+## 3. Impacto en requisitos extrafuncionales
+
+Indicar si el cambio altera la prioridad de algún REF o introduce nuevos. 
+
+Trazar cambios de prioridad que motiven cambios en decisiones de arquitectura. 
+
+ 
+
+| REF ID | Descripción                    | Prioridad anterior | Prioridad nueva | Cambio / Motivo           | 
+|--------|--------------------------------|--------------------|-----------------|---------------------------| 
+| REF-01 | [descripción]                  | Alta               | Alta            | Sin cambio                | 
+| REF-03 | [descripción]                  | Media              | Alta            | El cambio lo hace crítico | 
+| REF-07 | [nuevo REF derivado del cambio]| —                  | Alta            | Nuevo requisito           | 
 
 ----
 
-## Nuevas historias de usuario:
+## 4. Impacto en entidades del dominio 
 
-| ID   | Nombre                                          | Descripcíon  | 
-|------|-------------------------------------------------|--------| 
-| US-01 |                   |      | 
-| US-02 |               |      | 
-| US-03 | |      | 
-| US-04 |   |      | 
-| US-05 |         |      | 
+[Nuevas entidades, atributos o relaciones afectadas] + Diagrama acutalizado 
 
------
+ 
 
-## Ajuste de requisitos extrafuncionales afectados: tabla repriorizada
-.... 
+## 5. Impacto en mockups 
 
-----
+[Mockups afectados y descripción de cambios necesarios] 
 
-## Nuevas decisiones de diseño (con motivación e impacto) 
-....
+ 
 
------
+## 6. Impacto en arquitectura 
 
-## Tabla de trazabilidad actualizada:
-....
+ 
 
------
+### 6.1 ¿Cambia el estilo arquitectónico? 
 
-## Justificación global y trade-offs considerados:
-....
+[Sí/No] — Justificación: 
+
+[Si la repriorización de REF obliga a cambiar el estilo, explicar por qué. 
+
+Si el estilo se mantiene, justificar que sigue siendo válido frente al cambio.] 
+
+ 
+
+### 6.2 Relación REF (repriorizado) con decisiones de arquitectura 
+
+ 
+
+| REF ID | Prioridad nueva | Decisión de arquitectura que lo aborda         |
+|--------|-----------------|------------------------------------------------| 
+| REF-03 | Alta            | [cambio o confirmación de decisión existente]  | 
+| REF-07 | Alta            | [nueva decisión derivada del cambio]           | 
+
+ 
+
+## 7. Impacto en módulos 
+
+ 
+
+| Módulo             | Tipo de impacto    | Responsabilidad actualizada        | Ofrece a otros (actualizado)   | 
+|--------------------|--------------------|------------------------------------|--------------------------------| 
+| [Módulo existente] | modificado         | [descripción actualizada]          | [interfaces actualizadas]      | 
+| [Módulo nuevo]     | nuevo              | [responsabilidad]                  | [qué expone]                   | 
+| [Módulo eliminado] | eliminado          | —                                  | —                              | 
+
+ 
+
+Fundamentación de cambios modulares: 
+
+[Justificar por qué se agregan, modifican o eliminan módulos en función del 
+
+cambio de requerimientos y/o la repriorización de REF.] 
+
+ 
+
+## 8. Nuevas decisiones de diseño 
+
+ 
+
+### Decisión 1 
+
+- Decisión: [qué se decide] 
+
+- Motivación: [por qué, referenciando REF repriorizado si aplica] 
+
+- Alternativas consideradas: [opciones evaluadas] 
+
+- Impacto: [en qué módulos o REF afecta] 
+
+ 
+
+## 9. Trazabilidad actualizada 
+
+ 
+
+| Historia | REF relacionado | Módulo     | Mockup  | 
+|----------|-----------------|------------|---------| 
+| US-XX    | REF-XX          | [módulo]   | [ref]   | 
+
+ 
+
+## 10. Justificación global y trade-offs 
+
+[Por qué la solución propuesta es coherente con el sistema. 
+
+Qué trade-offs se asumieron, especialmente ante cambios de prioridad en REF. 
+
+Qué se gana y qué se sacrifica con las decisiones tomadas.] 
