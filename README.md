@@ -34,36 +34,11 @@ Este proyecto permite llevar un control detallado del flujo de dinero. El sistem
 
 Ver: [ReqExtrafuncionales.md](./ReqExtrafuncionales.md) 
 
- 
---- 
-
-### Template: ReqExtrafuncionales.md 
-
- 
-
-## Catálogo de Requisitos Extrafuncionales 
- ReqExtrafuncionales.md
- 
- 
-
-
- 
-
-> Nota: Los requisitos de prioridad Alta deben quedar explícitamente 
-
-> abordados en las decisiones de diseño arquitectónico. 
-
---- 
-
-
- 
-
 ## Entidades del Dominio 
 
 [Diagrama o descripción de entidades, atributos y relaciones] 
 
  
-
 ## Mockups 
 
 | Mockup | Historia de usuario relacionada | 
