@@ -137,8 +137,13 @@ Afecta en los modelos REF(-10,-03,-07)
 
 ## 10. Justificación global y trade-offs 
 
-[Por qué la solución propuesta es coherente con el sistema. 
+La solución propuesta: migrar de una arquitectura de capas a una de microservicios, es coherente con la naturaleza del cambio solicitado: integrar 3 bancos con APIs, formatos y frecuencias distintas, bajo exigencias de seguridad y disponibilidad que el estilo anterior no podía garantizar. Aislar el módulo bancario como un microservicio independiente permite que este opere bajo su propio SLA del 99.9% sin arrastrar al resto de la aplicación, y que reciba actualizaciones de seguridad de forma autónoma, algo imposible en un monolito.
+
 
 Qué trade-offs se asumieron, especialmente ante cambios de prioridad en REF. 
+El cambio más crítico es la repriorización de REF-10 (Recuperabilidad) y REF-07 (Seguridad) de prioridad baja/media a alta, motivado directamente por el manejo de datos bancarios sensibles. Esto implica asumir los siguientes trade-offs:
 
-Qué se gana y qué se sacrifica con las decisiones tomadas.] 
+Complejidad vs. disponibilidad: Pasar a microservicios aumenta considerablemente la complejidad operacional (orquestación, comunicación entre servicios, monitoreo distribuido), pero es el costo necesario para alcanzar el 99.9% de disponibilidad exigido en REF-03 y la independencia de despliegue del módulo bancario.
+Costo de desarrollo vs. seguridad: Implementar autenticación delegada (OAuth con los bancos), almacenamiento protegido de tokens y un sistema de alertas de seguridad (US-02) eleva el esfuerzo de desarrollo, pero es indispensable dado que REF-07 pasó a ser crítico.
+Consistencia eventual vs. resiliencia: Al desacoplar el módulo bancario, se acepta que la sincronización de movimientos puede no ser instantánea, priorizando la resiliencia y recuperabilidad (REF-10) frente a la consistencia inmediata.
+
