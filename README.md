@@ -63,8 +63,8 @@ Ver: [Arquitectura.md](./Arquitectura.md)
 
 | Integrante     | Rol         | Ítems de la rúbrica a cargo| 
 |----------------|-------------|----------------------------|
-|Paulo Salas     |Scrum Master |                            |
-|Simon Reyes     |Product Owner|                            |
-|Martin Herrera  |Developer    |                            |
-|Felipe Hernandez|Developer    |                            |
-|Vicente Coiro   |Developer    |                            | 
+|Paulo Salas Arismendi         |Scrum Master | Diseño del repositorio, historias de usuarios |
+|Simon Reyes Morales           |Product Owner| Historias de usuario, modelo de dominio       |
+|Martín Herrera Duranti        |Developer    | Mockups, Diseño del repositorio               |
+|Felipe Hernández Olivares     |Developer    | Arquitectura, Mockups                         |
+|Vicente Coiro Martínez        |Developer    | ReqExtraFuncionales, Mockups                  | 
