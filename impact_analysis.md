@@ -66,7 +66,7 @@ Trazar cambios de prioridad que motiven cambios en decisiones de arquitectura.
 |Mockups afectados|Cambios necesarios|
 |-----------------|------------------|
 |US-02|Ahora al estar enlazado con el banco, la app tendra que tener una opción de agregar los movimientos bancarios que el usuario desee. |
-|US-07|El resumen de gastos del mes familiar tambien se vera afectado por los gatos añadidos por los bancos|
+|US-07|Ahora al estar enlazado con el banco, como cada usuario puede registrar que gasto corresponde al bancario, la app tiene que separar cuanto en total gastó cada integrante familiar |
 |US-09|Como el usuario familiar quiere comparar el gasto mensual de 2 meses como el resumen mensual de gastos se ve afectado 
  
 
@@ -85,11 +85,11 @@ Ahora porque es necesario este cambio. Es necesario porque al tener un estilo de
 
  
 
-| REF ID | Prioridad nueva | Decisión de arquitectura que lo aborda         |
+| RNF ID | Prioridad nueva | Decisión de arquitectura que lo aborda         |
 |--------|-----------------|------------------------------------------------| 
-| REF-03 | Alta            | [cambio o confirmación de decisión existente]  | 
-| REF-07 | Alta            | [nueva decisión derivada del cambio]           | 
-
+| RNF-10 | Alta            | La recuperabilidad cambiara a alta ya que los bancos se van actualizando casi diariamente como tambien su seguridad  | 
+| RNF-03 | Alta            | Como el nuevo cambio nos pide, la disponibilidad de la app o mas especifico del modulo de bancos tienes que estar un 99.9% del tiempo disponible| 
+| RNF-07 | Alta            | Al tratar con datos bancarios la seguridad se mantendra alta |
  
 
 ## 7. Impacto en módulos 
