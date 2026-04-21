@@ -34,10 +34,7 @@ Este proyecto permite llevar un control detallado del flujo de dinero. El sistem
 
 Ver: [ReqExtrafuncionales.md](./ReqExtrafuncionales.md) 
 
-Ver archivo: ReqExtrafuncionales.md (ver template a continuación) 
-
  
-
 --- 
 
 ### Template: ReqExtrafuncionales.md 
@@ -58,9 +55,6 @@ Ver archivo: ReqExtrafuncionales.md (ver template a continuación)
 
 --- 
 
- 
-
-PLACEHOLDER_REMOVE 
 
  
 
