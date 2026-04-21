@@ -72,11 +72,8 @@ Trazar cambios de prioridad que motiven cambios en decisiones de arquitectura.
 
 ### 6.1 ¿Cambia el estilo arquitectónico? 
 
-[Sí/No] — Justificación: 
-
-[Si la repriorización de REF obliga a cambiar el estilo, explicar por qué. 
-
-Si el estilo se mantiene, justificar que sigue siendo válido frente al cambio.] 
+Si. Ya que nuestro estilo de capas solo satisface la importancia de seguridad y el atributo de disponibilidad es bajo, con las nuevas implementaciones, tendremos que cambiar de arquitectura a una estilo de micro servicios para poder mantener la seguridad y aumentar la disponibilidad de nuestra app, a su vez, este nuevo estilo permite modificar y desplegar el modulo de forma aislada, sin necesidad de redesplegar o detener la aplicación completa garantizando la continuidad del servicio.
+Ahora porque es necesario este cambio. Es necesario porque al tener un estilo de micro servicios tenemos la facilidad para que el modulo de bancos viva en un servidor separado y se mantenga activo y funcional independientemente del monolito principal mientras que en otro mantenemos el nivel de seguridad.
 
  
 
