@@ -21,7 +21,7 @@ flowchart BT
     style C fill:#757575,color:#ffffff
     linkStyle 0 stroke:#ffffff
     linkStyle 1 stroke:#ffffff,fill:none
-
+```
 ## Justificacion
 
 ### Arquitectura: Modelo de tres capas
