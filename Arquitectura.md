@@ -10,5 +10,5 @@ flowchart TB
         B2["Módulo de Finanzas"]
         B3["Módulo de Presupuestos"]
   end
-    A["Frontend<br>Vite + React"] -- HTTPS / JSON --> B
-    B --> C["Base de Datos<br>PostgreSQL"]
+    B -- HTTPS / JSON --> A["Frontend<br>Vite + React"]
+    C["Base de Datos<br>PostgreSQL"] --> B
