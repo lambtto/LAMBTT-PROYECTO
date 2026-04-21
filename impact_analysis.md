@@ -115,15 +115,13 @@ cambio de requerimientos y/o la repriorización de REF.]
 
  
 
-### Decisión 1 
+Se decide ir por micro servicios ya que es el modelo perfecto para mantener la disponibilidad de la app y del modelo de bancos
 
-- Decisión: [qué se decide] 
+La motivacion de este modelo fue la independencia que obtendra el modelo de banco del monolito principal 
 
-- Motivación: [por qué, referenciando REF repriorizado si aplica] 
+No tuvimos otras opciones evaluadas ya que vimos que micro servicios era la mas fiable
 
-- Alternativas consideradas: [opciones evaluadas] 
-
-- Impacto: [en qué módulos o REF afecta] 
+Afecta en los modelos REF(-10,-03,-07)
 
  
 
