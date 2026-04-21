@@ -37,6 +37,7 @@ Ver: [ReqExtrafuncionales.md](./ReqExtrafuncionales.md)
 ## Entidades del Dominio 
 
 [Diagrama o descripción de entidades, atributos y relaciones] 
+<img width="1564" height="771" alt="imagen" src="https://github.com/user-attachments/assets/3a44248e-8d27-4ce5-9362-e0b349244734" />
 
  
 ## Mockups 
