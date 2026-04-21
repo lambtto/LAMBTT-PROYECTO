@@ -16,4 +16,4 @@ Relaciones:
 |Gasto 0..* >—— 1 Categoria           |
 |GrupoFamiliar 1 ——< 0..* Presupuesto |
 |Usuario 1 ——< 0..* Reporte           |
-|-------------------------------------|
+
