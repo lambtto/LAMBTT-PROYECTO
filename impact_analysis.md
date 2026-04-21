@@ -10,17 +10,17 @@ El módulo de integracion bancaria debe operar con SLA de disponibilidad del 99.
 
 ### US-01: Vinculación de cuenta bancaria mediante autenticación segura
 
-Como usuario de GastApp, quiero vincular mi cuenta bancaria a la app de forma segura, para que el sistema pueda acceder a mis movimientos automáticamente sin que yo tenga que ingresar mis credenciales bancarias cada vez.
+Como usuario común, quiero conectar mi cuenta bancaria a la app de manera segura, para que el sistema pueda leer a mis movimientos de forma automática sin perder mis credenciales cada vez que ingreso. 
 
 Criterios de Aceptación
 
-•	CA1: Dado que el usuario quiere vincular un banco, cuando selecciona uno de los bancos disponibles, entonces la app lo redirige al portal oficial de autenticación de ese banco sin solicitarle sus credenciales directamente en GastApp.
+•	CA1: Dado que el usuario desea enlazar un banco, cuando elige una de las entidades bancarias disponibles, entonces la app lo lleva al sitio oficial de autenticación de ese banco sin solicitarle sus datos bancarios directamente.
 
-•	CA2: Dado que el usuario autoriza el acceso desde el portal del banco, cuando regresa a la app, entonces el sistema almacena el token de acceso de forma segura, muestra la cuenta como vinculada y lanza la primera sincronización automáticamente.
+•	CA2: Dado que el usuario aprueba el acceso desde el sitio del banco, cuando vuelve a la app, entonces el sistema guarda el token de acceso de forma protegida, refleja la cuenta como conectada e inicia la primera sincronización de movimientos de manera automática.
 
-•	CA3: Dado que el usuario cancela el proceso de autenticación en el portal del banco, cuando regresa a la app, entonces el sistema no guarda ningún dato, no muestra la cuenta como vinculada y permite reintentar el proceso.
+•	CA3: Dado que el usuario abandona el proceso de autenticación en el portal del banco, cuando retorna a la app, entonces el sistema descarta cualquier dato obtenido, no registra la cuenta como vinculada y le ofrece la opción de intentarlo nuevamente. 
 
-•	CA4: Dado que el banco rechaza la autorización (credenciales incorrectas, cuenta bloqueada, etc.), cuando el usuario regresa a la app, entonces el sistema informa que la vinculación no fue exitosa, indica el motivo si el banco lo provee, y no almacena ningún token.
+•	CA4: Dado que el banco rechaza la autorización por cualquier motivo (datos incorrectos, cuenta suspendida, entre otros), cuando el usuario regresa a la app, entonces el sistema le comunica que la conexión no pudo completarse, muestra el motivo, y no conserva ningún token.
 
 ### US-2 Aviso de Seguridad del módulo bancario
 
