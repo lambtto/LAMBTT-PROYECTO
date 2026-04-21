@@ -58,7 +58,6 @@ Trazar cambios de prioridad que motiven cambios en decisiones de arquitectura.
 ## 4. Impacto en entidades del dominio 
 <img width="656" height="648" alt="image" src="https://github.com/user-attachments/assets/8058aea2-fbbb-4268-861d-76ebdf0d78ef" />
 
-
  
 
 ## 5. Impacto en mockups 
