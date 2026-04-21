@@ -56,8 +56,71 @@ Trazar cambios de prioridad que motiven cambios en decisiones de arquitectura.
 ----
 
 ## 4. Impacto en entidades del dominio 
+```mermaid
+classDiagram
+    class Usuario {
+        +int id
+        +string nombre
+        +string email
+        +string rol
+    }
 
-[Nuevas entidades, atributos o relaciones afectadas] + Diagrama acutalizado 
+    class Gasto {
+        +int id
+        +float monto
+        +date fecha
+        +string descripcion
+        +string metodoPago
+        +boolean esCompartido
+        +int conciliacionId
+    }
+
+    class Categoria {
+        +int id
+        +string nombre
+        +string tipo
+    }
+
+    class GrupoFamiliar {
+        +int id
+        +string nombre
+        +int administrador
+    }
+
+    class Banco {
+        +int id
+        +string nombre
+        +string apiEndpoint
+        +string frecuenciaSync
+    }
+
+    class MovimientoBancario {
+        +int id
+        +float monto
+        +date fecha
+        +string descripcionOriginal
+        +string referenciaBancaria
+    }
+
+    class Conciliacion {
+        +int id
+        +date fechaEjecucion
+        +string estado
+        +float diferenciaMonto
+    }
+
+    %% Relaciones de Conciliación
+    Banco "1" --o "0..*" MovimientoBancario : importa
+    MovimientoBancario "1" -- "0..1" Conciliacion : genera
+    Gasto "1" -- "0..1" Conciliacion : se_valida_en
+    
+    %% Relaciones Base
+    Usuario "1" --o "0..*" Gasto
+    Usuario "0..*" --o "1" GrupoFamiliar
+    Gasto "0..*" --o "1" Categoria
+    GrupoFamiliar "1" --o "0..*" Presupuesto
+    Usuario "1" --o "0..*" Reporte
+```mermaid
 
  
 
