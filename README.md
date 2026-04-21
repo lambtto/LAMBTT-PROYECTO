@@ -95,10 +95,6 @@ quedar sin ser abordado.]
 
 ## 2. Diagrama de Arquitectura 
 
- 
-
-[Insertar diagrama que muestre el estilo y los módulos. 
-
 Ejemplo: ![Diagrama de Arquitectura](./diagrama_arquitectura.png)] 
 
 
