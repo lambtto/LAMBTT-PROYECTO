@@ -47,9 +47,10 @@ Trazar cambios de prioridad que motiven cambios en decisiones de arquitectura.
 
 | REF ID | Descripción                    | Prioridad anterior | Prioridad nueva | Cambio / Motivo           | 
 |--------|--------------------------------|--------------------|-----------------|---------------------------| 
-| REF-01 | [descripción]                  | Alta               | Alta            | Sin cambio                | 
-| REF-03 | [descripción]                  | Media              | Alta            | El cambio lo hace crítico | 
-| REF-07 | [nuevo REF derivado del cambio]| —                  | Alta            | Nuevo requisito           | 
+| REF-07 | Seguridad de datos             | Media              | Alta            | El cambio hace que la seguridad para el usuario sea vital, con tal de evitar filtraciones de datos               | 
+| REF-03 | Disponibilidad                 | Alta               | Alta            | El cambio requiere que se mantenga una disponibilidad elevada | 
+| REF-10 | Recuperabilidad                | Baja               | Alta            | Una alta recuperabilidad es clave dado que si se pierden datos de gastos o presupuestos el impacto es directo al usuario           | 
+
 
 ----
 
