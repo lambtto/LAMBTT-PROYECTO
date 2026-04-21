@@ -63,8 +63,11 @@ Trazar cambios de prioridad que motiven cambios en decisiones de arquitectura.
 
 ## 5. Impacto en mockups 
 
-[Mockups afectados y descripción de cambios necesarios] 
-
+|Mockups afectados|Cambios necesarios|
+|-----------------|------------------|
+|US-02|Ahora al estar enlazado con el banco, la app tendra que tener una opción de agregar los movimientos bancarios que el usuario desee. |
+|US-07|El resumen de gastos del mes familiar tambien se vera afectado por los gatos añadidos por los bancos|
+|US-09|Como el usuario familiar quiere comparar el gasto mensual de 2 meses como el resumen mensual de gastos se ve afectado 
  
 
 ## 6. Impacto en arquitectura 
