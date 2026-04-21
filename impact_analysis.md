@@ -21,21 +21,21 @@ Criterios de Aceptación
 
 •	CA4: Dado que quiero compartir el resumen con mi familia, cuando genero una comparativa, entonces puedo exportarla o compartirla directamente desde la app.
 
-### US-02: [nombre] 
+### US-2 Aviso de Seguridad del módulo bancario
 
-Como [actor], 
-
-quiero [acción], 
-
-para [beneficio]. 
+Como usuario común, quiero recibir notificaciones de alertas cuando se detecte algún movimiento sospechoso o si se tiene algún problema de seguridad en el sistema, así pudiendo resolver y proteger las cuentas ya vinculadas.
 
 Criterios de aceptación: 
 
-- CA1: ... 
+- CA1: Dado que se intenta ingresar desde un acceso no autorizado a un banco, cuando el sistema lo detecta, entonces envía una alerta de inmediato y guarda el registro (fecha, hora y banco) en las notificaciones.
 
-- CA2: ...
+- CA2: Dado que se actualiza un parche de seguridad para el módulo bancario, cuando está listo para instalarse, entonces avisa al usuario y le permite instalarlo en la app sin tener que redesplegar esta.
 
------
+- CA3: Dado que el usuario quiere gestionar sus avisos de seguridad, cuando entra a la configuración, entonces puede encender/apagar cada alerta
+
+- CA4: Dado que se disparan varias alertas iguales en poco tiempo, cuando el sistema las procesa, entonces las hace un resumen para así no saturar la pantalla.
+
+
 
 ## 3. Impacto en requisitos extrafuncionales
 
