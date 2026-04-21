@@ -14,7 +14,14 @@ El módulo de integracion bancaria debe operar con SLA de disponibilidad del 99.
 ----
 
 ## Nuevas historias de usuario:
-....
+
+| ID   | Nombre                                          | Descripcíon  | 
+|------|-------------------------------------------------|--------| 
+| US-01 |                   |      | 
+| US-02 |               |      | 
+| US-03 | |      | 
+| US-04 |   |      | 
+| US-05 |         |      | 
 
 -----
 
