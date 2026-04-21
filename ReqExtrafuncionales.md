@@ -21,6 +21,7 @@
 
 ### Prioridad Baja
 
+| ID :-| Atributo | Descripción|
 |RNF-08|Mantenibilidad    |El código debe mantener separación clara entre módulos (gastos, presupuesto, panel familiar). Las funciones principales deben estar documentadas.|
 |RNF-09|Exportabilidad    |La función de exportar debe generar archivos correctamente formateados (ej. CSV o PDF) y completarse en menos de 5 segundos.|
 |RNF-10|Recuperabilidad   |El sistema debe realizar respaldos periódicos de los datos. Ante un fallo, debe poder restaurarse al último estado válido.|
