@@ -44,16 +44,16 @@ Enlace de figma: https://www.figma.com/make/8a6hWw3p87KKdgCpop1Am1/Gastos-mensua
 
 | Mockup | Historia de usuario relacionada                                    |
 |--------|-------------------------------------------------------------------|
-|--------|[#Issue 1](https://github.com/lambtto/LAMBTT-PROYECTO/issues/1)|
-|--------|[#Issue 2](https://github.com/lambtto/LAMBTT-PROYECTO/issues/2)|
-|--------|[#Issue 3](https://github.com/lambtto/LAMBTT-PROYECTO/issues/3)| 
-|--------|[#Issue 4](https://github.com/lambtto/LAMBTT-PROYECTO/issues/4)|
-|--------|[#Issue 5](https://github.com/lambtto/LAMBTT-PROYECTO/issues/5)|
-|--------|[#Issue 6](https://github.com/lambtto/LAMBTT-PROYECTO/issues/7)| 
-|--------|[#Issue 7](https://github.com/lambtto/LAMBTT-PROYECTO/issues/8)|
-|--------|[#Issue 8](https://github.com/lambtto/LAMBTT-PROYECTO/issues/9)|
-|--------|[#Issue 9](https://github.com/lambtto/LAMBTT-PROYECTO/issues/10)|
-|--------|[#Issue 10](https://github.com/lambtto/LAMBTT-PROYECTO/issues/11)|
+|[Vista US-01](https://github.com/lambtto/LAMBTT-PROYECTO/blob/main/US-01.png)|[#Issue 1](https://github.com/lambtto/LAMBTT-PROYECTO/issues/1)|
+|[Vista US-02](https://github.com/lambtto/LAMBTT-PROYECTO/blob/main/US-02.png)|[#Issue 2](https://github.com/lambtto/LAMBTT-PROYECTO/issues/2)|
+|[Vista US-03](https://github.com/lambtto/LAMBTT-PROYECTO/blob/main/US-03.png)|[#Issue 3](https://github.com/lambtto/LAMBTT-PROYECTO/issues/3)| 
+|[Vista US-04](https://github.com/lambtto/LAMBTT-PROYECTO/blob/main/US-04.png)|[#Issue 4](https://github.com/lambtto/LAMBTT-PROYECTO/issues/4)|
+|[Vista US-05](https://github.com/lambtto/LAMBTT-PROYECTO/blob/main/US-05.png)|[#Issue 5](https://github.com/lambtto/LAMBTT-PROYECTO/issues/5)|
+|[Vista US-06](https://github.com/lambtto/LAMBTT-PROYECTO/blob/main/US-06.png)|[#Issue 6](https://github.com/lambtto/LAMBTT-PROYECTO/issues/7)| 
+|[Vista US-07](https://github.com/lambtto/LAMBTT-PROYECTO/blob/main/US-07.png)|[#Issue 7](https://github.com/lambtto/LAMBTT-PROYECTO/issues/8)|
+|[Vista US-08](https://github.com/lambtto/LAMBTT-PROYECTO/blob/main/US-08.png)|[#Issue 8](https://github.com/lambtto/LAMBTT-PROYECTO/issues/9)|
+|[Vista US-09](https://github.com/lambtto/LAMBTT-PROYECTO/blob/main/US-09.png)|[#Issue 9](https://github.com/lambtto/LAMBTT-PROYECTO/issues/10)|
+|[Vista US-10](https://github.com/lambtto/LAMBTT-PROYECTO/blob/main/US-10.png)|[#Issue 10](https://github.com/lambtto/LAMBTT-PROYECTO/issues/11)|
 
 ## Diseño Arquitectónico 
 
