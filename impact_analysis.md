@@ -35,19 +35,6 @@ Criterios de aceptación:
 
 - CA2: ...
 
-### US-03: [nombre] 
-
-Como [actor], 
-
-quiero [acción], 
-
-para [beneficio]. 
-
-Criterios de aceptación: 
-
-- CA1: ... 
-
-- CA2: ... 
 -----
 
 ## 3. Impacto en requisitos extrafuncionales
