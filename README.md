@@ -42,18 +42,18 @@ ver:[modelo-dominio.md](./modelo-dominio.md)
 ## Mockups 
 Enlace de figma: https://www.figma.com/make/8a6hWw3p87KKdgCpop1Am1/Gastos-mensuales-app?fullscreen=1&t=4Y3ODySBsILzqNbw-1&preview-route=%2Fbudget
 
-| Mockup | Historia de usuario relacionada | 
-|--------|-------------------------------------------------|------------------| 
-|--------|[#Issue 1](https://github.com/lambtto/LAMBTT-PROYECTO/issues/1)| 
-|--------|[#Issue 2](https://github.com/lambtto/LAMBTT-PROYECTO/issues/2)| 
+| Mockup | Historia de usuario relacionada                                    |
+|--------|-------------------------------------------------------------------|
+|--------|[#Issue 1](https://github.com/lambtto/LAMBTT-PROYECTO/issues/1)|
+|--------|[#Issue 2](https://github.com/lambtto/LAMBTT-PROYECTO/issues/2)|
 |--------|[#Issue 3](https://github.com/lambtto/LAMBTT-PROYECTO/issues/3)| 
-|--------|[#Issue 4](https://github.com/lambtto/LAMBTT-PROYECTO/issues/4)| 
-|--------|[#Issue 5](https://github.com/lambtto/LAMBTT-PROYECTO/issues/5)| 
+|--------|[#Issue 4](https://github.com/lambtto/LAMBTT-PROYECTO/issues/4)|
+|--------|[#Issue 5](https://github.com/lambtto/LAMBTT-PROYECTO/issues/5)|
 |--------|[#Issue 6](https://github.com/lambtto/LAMBTT-PROYECTO/issues/7)| 
-|--------|[#Issue 7](https://github.com/lambtto/LAMBTT-PROYECTO/issues/8)| 
-|--------|[#Issue 8](https://github.com/lambtto/LAMBTT-PROYECTO/issues/9)| 
+|--------|[#Issue 7](https://github.com/lambtto/LAMBTT-PROYECTO/issues/8)|
+|--------|[#Issue 8](https://github.com/lambtto/LAMBTT-PROYECTO/issues/9)|
 |--------|[#Issue 9](https://github.com/lambtto/LAMBTT-PROYECTO/issues/10)|
-|--------|[#Issue 10](https://github.com/lambtto/LAMBTT-PROYECTO/issues/11)| 
+|--------|[#Issue 10](https://github.com/lambtto/LAMBTT-PROYECTO/issues/11)|
 
 ## Diseño Arquitectónico 
 
