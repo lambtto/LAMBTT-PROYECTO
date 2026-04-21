@@ -57,7 +57,11 @@ Trazar cambios de prioridad que motiven cambios en decisiones de arquitectura.
 
 ## 4. Impacto en entidades del dominio 
 <img width="656" height="648" alt="image" src="https://github.com/user-attachments/assets/8058aea2-fbbb-4268-861d-76ebdf0d78ef" />
-
+| Entidad | Atributos                                                                    | Propósito       |
+|---------|------------------------------------------------------------------------------|
+|Banco|,"id, nombre, tipoAPI, estadoServicio, ultimaSincronizacion"|Gestionar la configuración de cada banco y monitorear su disponibilidad (SLA).
+|MovimientoBancario| "id, monto, fecha, descripcionOriginal, referenciaUnica, idBanco"| Almacena los datos crudos extraídos de las APIs bancarias para su posterior procesamiento.
+|Conciliacion|"id, fechaEjecucion, estado (Pendiente, Exitoso, Discrepancia), comentario"| Actúa como el proceso lógico que vincula un gasto manual con un movimiento real.
 
  
 
