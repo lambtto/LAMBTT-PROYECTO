@@ -14,8 +14,11 @@ Como miembro de un grupo familiar, quiero comparar gastos del hogar entre distin
 
 Criterios de Aceptación
 •	CA1: Dado que tengo historial de gastos registrados, cuando accedo a la sección de comparativa, entonces puedo seleccionar al menos dos meses y ver un resumen comparativo por categoría.
+
 •	CA2: Dado que quiero detectar variaciones importantes, cuando un gasto en una categoría aumenta más del 20% respecto al mes anterior, entonces la app lo destaca visualmente con un indicador de alerta.
+
 •	CA3: Dado que el grupo familiar tiene múltiples miembros, cuando visualizo la comparativa, entonces puedo filtrar por miembro individual o ver el consolidado familiar.
+
 •	CA4: Dado que quiero compartir el resumen con mi familia, cuando genero una comparativa, entonces puedo exportarla o compartirla directamente desde la app.
 
 ### US-02: [nombre] 
