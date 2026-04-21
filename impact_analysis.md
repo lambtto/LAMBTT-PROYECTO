@@ -66,7 +66,7 @@ Trazar cambios de prioridad que motiven cambios en decisiones de arquitectura.
 |-----------------|------------------|
 |US-02|Ahora al estar enlazado con el banco, la app tendra que tener una opción de agregar los movimientos bancarios que el usuario desee. |
 |US-07|Ahora al estar enlazado con el banco, como cada usuario tiene un banco distitnto asociado el sistema debe hacer un resumen correcto cuanto gasto cada integrante familiar sin mezclar ni equivocarse de banco |
-|US-09|Como el resumen mensual de gastos se ve afectado por los bancos conectados a cada familiar, los graficos realizados tendran que incluir los gastos añadidos tanto por el integrante como por los bancos, sea debito o efectivo
+|US-09|Como el resumen mensual de gastos se ve afectado por los bancos conectados a cada familiar, los graficos realizados tendran que incluir los gastos añadidos de cada integrante sea en efectivo o por alguna transacción bancaria|
  
 
 ## 6. Impacto en arquitectura 
