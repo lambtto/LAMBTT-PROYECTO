@@ -8,18 +8,19 @@ El módulo de integracion bancaria debe operar con SLA de disponibilidad del 99.
 
 ## 2. Nuevas historias de usuario:
 
-### US-01: Comparativa de Gastos entre Meses
+### US-01: Vinculación de cuenta bancaria mediante autenticación segura
 
-Como miembro de un grupo familiar, quiero comparar gastos del hogar entre distintos meses por categoría, para identificar tendencias de consumo y tomar mejores decisiones financieras en familia.
+Como usuario de GastApp, quiero vincular mi cuenta bancaria a la app de forma segura, para que el sistema pueda acceder a mis movimientos automáticamente sin que yo tenga que ingresar mis credenciales bancarias cada vez.
 
 Criterios de Aceptación
-•	CA1: Dado que tengo historial de gastos registrados, cuando accedo a la sección de comparativa, entonces puedo seleccionar al menos dos meses y ver un resumen comparativo por categoría.
 
-•	CA2: Dado que quiero detectar variaciones importantes, cuando un gasto en una categoría aumenta más del 20% respecto al mes anterior, entonces la app lo destaca visualmente con un indicador de alerta.
+•	CA1: Dado que el usuario quiere vincular un banco, cuando selecciona uno de los bancos disponibles, entonces la app lo redirige al portal oficial de autenticación de ese banco sin solicitarle sus credenciales directamente en GastApp.
 
-•	CA3: Dado que el grupo familiar tiene múltiples miembros, cuando visualizo la comparativa, entonces puedo filtrar por miembro individual o ver el consolidado familiar.
+•	CA2: Dado que el usuario autoriza el acceso desde el portal del banco, cuando regresa a la app, entonces el sistema almacena el token de acceso de forma segura, muestra la cuenta como vinculada y lanza la primera sincronización automáticamente.
 
-•	CA4: Dado que quiero compartir el resumen con mi familia, cuando genero una comparativa, entonces puedo exportarla o compartirla directamente desde la app.
+•	CA3: Dado que el usuario cancela el proceso de autenticación en el portal del banco, cuando regresa a la app, entonces el sistema no guarda ningún dato, no muestra la cuenta como vinculada y permite reintentar el proceso.
+
+•	CA4: Dado que el banco rechaza la autorización (credenciales incorrectas, cuenta bloqueada, etc.), cuando el usuario regresa a la app, entonces el sistema informa que la vinculación no fue exitosa, indica el motivo si el banco lo provee, y no almacena ningún token.
 
 ### US-2 Aviso de Seguridad del módulo bancario
 
