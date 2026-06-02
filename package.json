@@ -1,0 +1,24 @@
+{
+  "name": "lambtt-proyecto",
+  "version": "1.0.0",
+  "description": "GastApp nació de una necesidad bastante concreta: llevar un registro de en qué se va la plata cada mes. Ya sea solo o en familia, la idea es tener todo en un mismo lugar sin complicaciones.\r La app permite anotar gastos, asignarles una categoría, ver cuánto llevas gastado en el mes y comparar con meses anteriores. También tiene una parte pensada para grupos familiares, donde todos los integrantes pueden ver y registrar gastos del hogar de forma compartida.\r No es una app de contabilidad ni nada sofisticado, es algo práctico para el día a día.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lambtto/LAMBTT-PROYECTO.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/lambtto/LAMBTT-PROYECTO/issues"
+  },
+  "homepage": "https://github.com/lambtto/LAMBTT-PROYECTO#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
