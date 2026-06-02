@@ -1,39 +1,3 @@
-martiiind
-martiiind
-Invisible
-
-martiiind — 20/04/2026 19:45
-https://claude.ai/public/artifacts/84fd2a75-9928-4fff-9c4a-0643521f937f
-martiiind — 20/04/2026 20:19
-https://www.figma.com/make/8a6hWw3p87KKdgCpop1Am1/Gastos-mensuales-app?p=f&t=zkh8rhV7C6AU3Z9F-0&fullscreen=1
-Make
-Gastos mensuales app
-Created with Figma
-
-martiiind — 20/04/2026 23:09
-martín 88
-rAyo1 [MDKT],  — 21/04/2026 12:38
-El impacto de este cambio es importante ya que nuestra app solo recaía en la importancia de la seguridad, al añadir conectividad con otros tres bancos estos tienen que estar activos un 99.9% del tiempo y esto no congenia para nada con nuestra arquitectura de capas.
- Necesitaremos una rediseño de arquitectura a un sistema de microservicios para así poder mantener el modulo de bancos en un servidor propio, así, si el frontend falla el modulo se mantendrá activo la mayoría del tiempo
-rAyo1 [MDKT],  — 21/04/2026 12:51
-¿Cambia el estilo arquitectónico?
-R:Si ya que nuestro estilo de capas solo satisface la importancia de seguridad y el atributo de disponibilidad es bajo, con las nuevas implementaciones, tendremos que cambiar de arquitectura a una estilo de micro servicios para poder mantener la seguridad y aumentar la disponibilidad de nuestra app, a su vez, este nuevo estilo permite modificar y desplegar el modulo de forma aislada, sin necesidad de redesplegar o detener la aplicación completa garantizando la continuidad del servicio.
- Ahora porque es necesario este cambio. Es necesario porque al tener un estilo de micro servicios tenemos la facilidad para que el modulo de bancos viva en un servidor separado y se mantenga activo y funcional independientemente del monolito principal mientras que en otro mantenemos el nivel de seguridad. 
-rAyo1 [MDKT],  — 21/04/2026 13:03
-
-
-Imagen
-Imagen
-primer chat con gemini
-Segundo chat
-Imagen
-Imagen
-Imagen
-Imagen
-Imagen
-rAyo1 [MDKT],  — ayer a las 23:19
-http://localhost:3000/docs
-rAyo1 [MDKT],  — ayer a las 23:59
 const express      = require('express');
 const db           = require('./db');
 const swaggerUi    = require('swagger-ui-express');
