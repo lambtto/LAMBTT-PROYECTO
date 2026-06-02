@@ -2,17 +2,10 @@ const express      = require('express');
 const db           = require('./db');
 const swaggerUi    = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
-<<<<<<< HEAD
 
 const app = express();
 app.use(express.json());
 
-=======
- 
-const app = express();
-app.use(express.json());
- 
->>>>>>> e451045ee4e94de1832d3962ab25e76db32d00e4
 const swaggerSpec = swaggerJsdoc({
   definition: {
     openapi: '3.0.0',
@@ -30,15 +23,9 @@ const swaggerSpec = swaggerJsdoc({
   },
   apis: ['./index.js']
 });
-<<<<<<< HEAD
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-=======
- 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
- 
->>>>>>> e451045ee4e94de1832d3962ab25e76db32d00e4
 // ─────────────────────────────────────────────────────
 // Middleware autenticación simulada
 // ─────────────────────────────────────────────────────
@@ -49,11 +36,7 @@ function authMiddleware(req, res, next) {
   req.usuario = auth.replace('Bearer ', '').trim() || 'usuario';
   next();
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> e451045ee4e94de1832d3962ab25e76db32d00e4
 // ─────────────────────────────────────────────────────
 // Helpers de validación
 // ─────────────────────────────────────────────────────
@@ -63,11 +46,7 @@ function validarMonto(monto) {
     return 'El monto es inválido. Debe ser un número mayor a 0.';
   return null;
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> e451045ee4e94de1832d3962ab25e76db32d00e4
 function validarFecha(fecha) {
   if (!fecha) return 'La fecha es obligatoria.';
   const hoy = new Date(); hoy.setHours(23, 59, 59, 999);
@@ -76,19 +55,11 @@ function validarFecha(fecha) {
   if (d > hoy) return 'No se permiten fechas posteriores al día actual.';
   return null;
 }
-<<<<<<< HEAD
 
 // ═════════════════════════════════════════════════════
 // HU1 — CATEGORÍAS PERSONALES
 // ═════════════════════════════════════════════════════
 
-=======
- 
-// ═════════════════════════════════════════════════════
-// HU1 — CATEGORÍAS PERSONALES
-// ═════════════════════════════════════════════════════
- 
->>>>>>> e451045ee4e94de1832d3962ab25e76db32d00e4
 /**
  * @swagger
  * /categorias:
@@ -102,11 +73,7 @@ function validarFecha(fecha) {
 app.get('/categorias', authMiddleware, (req, res) => {
   res.json(db.prepare('SELECT * FROM categorias ORDER BY nombre').all());
 });
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> e451045ee4e94de1832d3962ab25e76db32d00e4
 /**
  * @swagger
  * /categorias:
