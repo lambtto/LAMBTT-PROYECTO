@@ -2,10 +2,10 @@ const express      = require('express');
 const db           = require('./db');
 const swaggerUi    = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
- 
+
 const app = express();
 app.use(express.json());
- 
+
 const swaggerSpec = swaggerJsdoc({
   definition: {
     openapi: '3.0.0',
@@ -23,9 +23,9 @@ const swaggerSpec = swaggerJsdoc({
   },
   apis: ['./index.js']
 });
- 
+
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
- 
+
 // ─────────────────────────────────────────────────────
 // Middleware autenticación simulada
 // ─────────────────────────────────────────────────────
@@ -36,7 +36,7 @@ function authMiddleware(req, res, next) {
   req.usuario = auth.replace('Bearer ', '').trim() || 'usuario';
   next();
 }
- 
+
 // ─────────────────────────────────────────────────────
 // Helpers de validación
 // ─────────────────────────────────────────────────────
@@ -46,7 +46,7 @@ function validarMonto(monto) {
     return 'El monto es inválido. Debe ser un número mayor a 0.';
   return null;
 }
- 
+
 function validarFecha(fecha) {
   if (!fecha) return 'La fecha es obligatoria.';
   const hoy = new Date(); hoy.setHours(23, 59, 59, 999);
@@ -55,11 +55,11 @@ function validarFecha(fecha) {
   if (d > hoy) return 'No se permiten fechas posteriores al día actual.';
   return null;
 }
- 
+
 // ═════════════════════════════════════════════════════
 // HU1 — CATEGORÍAS PERSONALES
 // ═════════════════════════════════════════════════════
- 
+
 /**
  * @swagger
  * /categorias:
@@ -73,7 +73,7 @@ function validarFecha(fecha) {
 app.get('/categorias', authMiddleware, (req, res) => {
   res.json(db.prepare('SELECT * FROM categorias ORDER BY nombre').all());
 });
- 
+
 /**
  * @swagger
  * /categorias:
@@ -104,7 +104,7 @@ app.post('/categorias', authMiddleware, (req, res) => {
   const r = db.prepare('INSERT INTO categorias (nombre, compartida) VALUES (?, ?)').run(nombre.trim(), compartida ? 1 : 0);
   res.status(201).json({ id: r.lastInsertRowid, nombre: nombre.trim(), compartida: compartida ? 1 : 0 });
 });
- 
+
 /**
  * @swagger
  * /categorias/{id}:
@@ -123,11 +123,11 @@ app.delete('/categorias/:id', authMiddleware, (req, res) => {
   if (i.changes === 0) return res.status(404).json({ error: 'Categoría no encontrada.' });
   res.json({ mensaje: 'Categoría eliminada.' });
 });
- 
+
 // ═════════════════════════════════════════════════════
 // HU1 — GASTOS PERSONALES
 // ═════════════════════════════════════════════════════
- 
+
 /**
  * @swagger
  * /gastos:
@@ -157,7 +157,7 @@ app.get('/gastos', authMiddleware, (req, res) => {
   sql += ` ORDER BY g.fecha DESC`;
   res.json(db.prepare(sql).all(...params));
 });
- 
+
 /**
  * @swagger
  * /gastos/{id}:
@@ -180,7 +180,7 @@ app.get('/gastos/:id', authMiddleware, (req, res) => {
   if (!g) return res.status(404).json({ error: 'Gasto no encontrado.' });
   res.json(g);
 });
- 
+
 /**
  * @swagger
  * /gastos:
@@ -207,27 +207,27 @@ app.get('/gastos/:id', authMiddleware, (req, res) => {
  */
 app.post('/gastos', authMiddleware, (req, res) => {
   const { monto, categoria_id, fecha, descripcion, metodo_pago } = req.body;
- 
+
   const errMonto = validarMonto(monto);
   if (errMonto) return res.status(400).json({ error: errMonto });
- 
+
   const errFecha = validarFecha(fecha);
   if (errFecha) return res.status(400).json({ error: errFecha });
- 
+
   if (!categoria_id)
     return res.status(400).json({ error: 'La categoría es obligatoria.' });
- 
+
   if (!db.prepare('SELECT id FROM categorias WHERE id = ?').get(categoria_id))
     return res.status(400).json({ error: 'La categoría indicada no existe.' });
- 
+
   const r = db.prepare(`
     INSERT INTO gastos (monto, categoria_id, fecha, descripcion, metodo_pago, usuario)
     VALUES (?, ?, ?, ?, ?, ?)
   `).run(monto, categoria_id, fecha, descripcion || null, metodo_pago || null, req.usuario);
- 
+
   res.status(201).json({ id: r.lastInsertRowid, monto, categoria_id, fecha, descripcion: descripcion || null, metodo_pago: metodo_pago || null });
 });
- 
+
 /**
  * @swagger
  * /gastos/{id}:
@@ -256,25 +256,25 @@ app.post('/gastos', authMiddleware, (req, res) => {
  */
 app.put('/gastos/:id', authMiddleware, (req, res) => {
   const { monto, categoria_id, fecha, descripcion, metodo_pago } = req.body;
- 
+
   const errMonto = validarMonto(monto);
   if (errMonto) return res.status(400).json({ error: errMonto });
- 
+
   const errFecha = validarFecha(fecha);
   if (errFecha) return res.status(400).json({ error: errFecha });
- 
+
   if (categoria_id && !db.prepare('SELECT id FROM categorias WHERE id = ?').get(categoria_id))
     return res.status(400).json({ error: 'La categoría indicada no existe.' });
- 
+
   const i = db.prepare(`
     UPDATE gastos SET monto=?, categoria_id=?, fecha=?, descripcion=?, metodo_pago=?
     WHERE id=?
   `).run(monto, categoria_id, fecha, descripcion || null, metodo_pago || null, req.params.id);
- 
+
   if (i.changes === 0) return res.status(404).json({ error: 'Gasto no encontrado.' });
   res.json({ mensaje: 'Gasto actualizado correctamente.' });
 });
- 
+
 /**
  * @swagger
  * /gastos/{id}:
@@ -293,11 +293,11 @@ app.delete('/gastos/:id', authMiddleware, (req, res) => {
   if (i.changes === 0) return res.status(404).json({ error: 'Gasto no encontrado.' });
   res.json({ mensaje: 'Gasto eliminado correctamente.' });
 });
- 
+
 // ═════════════════════════════════════════════════════
 // HU2 — GRUPOS FAMILIARES
 // ═════════════════════════════════════════════════════
- 
+
 /**
  * @swagger
  * /grupos:
@@ -315,7 +315,7 @@ app.get('/grupos', authMiddleware, (req, res) => {
   });
   res.json(grupos);
 });
- 
+
 /**
  * @swagger
  * /grupos:
@@ -342,13 +342,13 @@ app.post('/grupos', authMiddleware, (req, res) => {
     return res.status(400).json({ error: 'El nombre del grupo es obligatorio.' });
   if (db.prepare('SELECT id FROM grupos WHERE nombre = ?').get(nombre.trim()))
     return res.status(400).json({ error: 'Ya existe un grupo con ese nombre.' });
- 
+
   const r = db.prepare('INSERT INTO grupos (nombre) VALUES (?)').run(nombre.trim());
   // El creador se agrega automáticamente como miembro
   db.prepare('INSERT OR IGNORE INTO grupo_miembros (grupo_id, usuario) VALUES (?, ?)').run(r.lastInsertRowid, req.usuario);
   res.status(201).json({ id: r.lastInsertRowid, nombre: nombre.trim(), miembros: [req.usuario] });
 });
- 
+
 /**
  * @swagger
  * /grupos/{id}/miembros:
@@ -385,11 +385,11 @@ app.post('/grupos/:id/miembros', authMiddleware, (req, res) => {
     res.status(400).json({ error: 'El usuario ya es miembro de este grupo.' });
   }
 });
- 
+
 // ═════════════════════════════════════════════════════
 // HU2 — GASTOS FAMILIARES COMPARTIDOS
 // ═════════════════════════════════════════════════════
- 
+
 /**
  * @swagger
  * /grupos/{id}/gastos:
@@ -409,11 +409,11 @@ app.post('/grupos/:id/miembros', authMiddleware, (req, res) => {
 app.get('/grupos/:id/gastos', authMiddleware, (req, res) => {
   if (!db.prepare('SELECT id FROM grupos WHERE id = ?').get(req.params.id))
     return res.status(404).json({ error: 'Grupo no encontrado.' });
- 
+
   const esMiembro = db.prepare('SELECT id FROM grupo_miembros WHERE grupo_id = ? AND usuario = ?').get(req.params.id, req.usuario);
   if (!esMiembro)
     return res.status(403).json({ error: 'No eres miembro de este grupo.' });
- 
+
   const { mes, anio } = req.query;
   let sql = `
     SELECT g.*, c.nombre AS categoria_nombre, c.compartida, g.usuario AS registrado_por
@@ -425,10 +425,10 @@ app.get('/grupos/:id/gastos', authMiddleware, (req, res) => {
   if (mes)  { sql += ` AND strftime('%m', g.fecha) = ?`; params.push(String(mes).padStart(2, '0')); }
   if (anio) { sql += ` AND strftime('%Y', g.fecha) = ?`; params.push(String(anio)); }
   sql += ` ORDER BY g.fecha DESC`;
- 
+
   res.json(db.prepare(sql).all(...params));
 });
- 
+
 /**
  * @swagger
  * /grupos/{id}/gastos:
@@ -459,32 +459,32 @@ app.get('/grupos/:id/gastos', authMiddleware, (req, res) => {
  */
 app.post('/grupos/:id/gastos', authMiddleware, (req, res) => {
   const { monto, categoria_id, fecha, descripcion, metodo_pago } = req.body;
- 
+
   if (!db.prepare('SELECT id FROM grupos WHERE id = ?').get(req.params.id))
     return res.status(404).json({ error: 'Grupo no encontrado.' });
- 
+
   const esMiembro = db.prepare('SELECT id FROM grupo_miembros WHERE grupo_id = ? AND usuario = ?').get(req.params.id, req.usuario);
   if (!esMiembro)
     return res.status(403).json({ error: 'No eres miembro de este grupo.' });
- 
+
   const errMonto = validarMonto(monto);
   if (errMonto) return res.status(400).json({ error: errMonto });
- 
+
   const errFecha = validarFecha(fecha);
   if (errFecha) return res.status(400).json({ error: errFecha });
- 
+
   if (!categoria_id)
     return res.status(400).json({ error: 'La categoría es obligatoria.' });
- 
+
   const categoria = db.prepare('SELECT * FROM categorias WHERE id = ?').get(categoria_id);
   if (!categoria)
     return res.status(400).json({ error: 'La categoría indicada no existe.' });
- 
+
   const r = db.prepare(`
     INSERT INTO gastos (monto, categoria_id, fecha, descripcion, metodo_pago, grupo_id, usuario)
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `).run(monto, categoria_id, fecha, descripcion || null, metodo_pago || null, req.params.id, req.usuario);
- 
+
   res.status(201).json({
     id: r.lastInsertRowid,
     monto,
@@ -498,7 +498,7 @@ app.post('/grupos/:id/gastos', authMiddleware, (req, res) => {
     visible_para_grupo: true
   });
 });
- 
+
 /**
  * @swagger
  * /grupos/{id}/gastos/{gastoId}:
@@ -518,10 +518,10 @@ app.delete('/grupos/:id/gastos/:gastoId', authMiddleware, (req, res) => {
   const esMiembro = db.prepare('SELECT id FROM grupo_miembros WHERE grupo_id = ? AND usuario = ?').get(req.params.id, req.usuario);
   if (!esMiembro)
     return res.status(403).json({ error: 'No eres miembro de este grupo.' });
- 
+
   const i = db.prepare('DELETE FROM gastos WHERE id = ? AND grupo_id = ?').run(req.params.gastoId, req.params.id);
   if (i.changes === 0) return res.status(404).json({ error: 'Gasto no encontrado en este grupo.' });
   res.json({ mensaje: 'Gasto compartido eliminado.' });
 });
- 
+
 app.listen(3000, () => console.log('API Gastos v2 en http://localhost:3000'));
