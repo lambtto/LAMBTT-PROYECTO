@@ -1,0 +1,839 @@
+{
+  "info": {
+    "name": "GastApp - HU1 y HU2",
+    "_postman_id": "gastapp-cin314-2026",
+    "description": "Casos de prueba para US-01 (Registro gasto individual) y US-06 (Registro gasto compartido). CIN314 - Fundamentos de Ingeniería de Software.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "HU1 - Registro de Gasto Individual (US-01)",
+      "item": [
+        {
+          "name": "G-01 | Registrar gasto válido con todos los campos (happy path)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer usuario1"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monto\": 15000,\n  \"categoria_id\": 1,\n  \"fecha\": \"2026-05-20\",\n  \"descripcion\": \"Almuerzo de trabajo\",\n  \"metodo_pago\": \"Tarjeta de credito\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/gastos",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "gastos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 creado', () => pm.response.to.have.status(201));",
+                  "pm.test('Retorna id del gasto', () => pm.expect(pm.response.json()).to.have.property('id'));",
+                  "pm.test('Descripcion guardada', () => pm.expect(pm.response.json().descripcion).to.eql('Almuerzo de trabajo'));",
+                  "pm.test('Metodo de pago asociado', () => pm.expect(pm.response.json().metodo_pago).to.eql('Tarjeta de credito'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "G-02 | Registrar gasto - monto negativo (límite: monto = -1)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer usuario1"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monto\": -1,\n  \"categoria_id\": 1,\n  \"fecha\": \"2026-05-20\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/gastos",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "gastos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 error validacion', () => pm.response.to.have.status(400));",
+                  "pm.test('Mensaje de monto invalido', () => pm.expect(pm.response.json().error).to.include('inválido'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "G-03 | Registrar gasto - monto cero (límite: valor frontera = 0)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer usuario1"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monto\": 0,\n  \"categoria_id\": 1,\n  \"fecha\": \"2026-05-20\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/gastos",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "gastos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 error validacion', () => pm.response.to.have.status(400));",
+                  "pm.test('Monto cero rechazado', () => pm.expect(pm.response.json().error).to.include('inválido'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "G-04 | Registrar gasto - fecha futura (límite: año 2099)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer usuario1"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monto\": 5000,\n  \"categoria_id\": 1,\n  \"fecha\": \"2099-12-31\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/gastos",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "gastos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 fecha futura', () => pm.response.to.have.status(400));",
+                  "pm.test('Mensaje fecha no permitida', () => pm.expect(pm.response.json().error).to.include('posteriores'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "G-05 | Registrar gasto - sin categoría (campo obligatorio ausente)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer usuario1"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monto\": 5000,\n  \"fecha\": \"2026-05-20\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/gastos",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "gastos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 campo obligatorio', () => pm.response.to.have.status(400));",
+                  "pm.test('Error de categoria obligatoria', () => pm.expect(pm.response.json().error).to.include('categoría'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "G-06 | Registrar gasto - categoría inexistente (clase: FK inválida)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer usuario1"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monto\": 5000,\n  \"categoria_id\": 99999,\n  \"fecha\": \"2026-05-20\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/gastos",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "gastos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 FK invalida', () => pm.response.to.have.status(400));",
+                  "pm.test('Categoria no existe', () => pm.expect(pm.response.json().error).to.include('no existe'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "G-07 | Registrar gasto - sin descripción ni método pago (campos opcionales null)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer usuario1"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monto\": 3500,\n  \"categoria_id\": 2,\n  \"fecha\": \"2026-05-15\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/gastos",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "gastos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 con campos opcionales omitidos', () => pm.response.to.have.status(201));",
+                  "pm.test('Descripcion es null', () => pm.expect(pm.response.json().descripcion).to.be.null);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "G-08 | Historial de gastos con filtro por mes y año",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer usuario1"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/gastos?mes=5&anio=2026",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "gastos"
+              ],
+              "query": [
+                {
+                  "key": "mes",
+                  "value": "5"
+                },
+                {
+                  "key": "anio",
+                  "value": "2026"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 historial', () => pm.response.to.have.status(200));",
+                  "pm.test('Retorna array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "G-09 | Crear categoría personalizada (lógica de negocio)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer usuario1"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Gym\",\n  \"compartida\": 0\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/categorias",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "categorias"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 categoria creada', () => pm.response.to.have.status(201));",
+                  "pm.test('Nombre correcto', () => pm.expect(pm.response.json().nombre).to.eql('Gym'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "G-10 | Sin autenticación - acceso denegado (clase: no autenticado)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/gastos",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "gastos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 no autenticado', () => pm.response.to.have.status(401));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HU2 - Registro de Gasto Compartido del Hogar (US-06)",
+      "item": [
+        {
+          "name": "GC-01 | Registrar gasto compartido - categoría compartida (happy path)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer maria"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monto\": 80000,\n  \"categoria_id\": 6,\n  \"fecha\": \"2026-05-20\",\n  \"descripcion\": \"Cuenta de luz mayo\",\n  \"metodo_pago\": \"Transferencia\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/grupos/1/gastos",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "grupos",
+                "1",
+                "gastos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 gasto compartido creado', () => pm.response.to.have.status(201));",
+                  "pm.test('Visible para el grupo', () => pm.expect(pm.response.json().visible_para_grupo).to.be.true);",
+                  "pm.test('Registrado por maria', () => pm.expect(pm.response.json().registrado_por).to.eql('maria'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "GC-02 | Registrar gasto - usuario no miembro del grupo (clase: 403 no autorizado)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer intruso"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monto\": 50000,\n  \"categoria_id\": 6,\n  \"fecha\": \"2026-05-20\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/grupos/1/gastos",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "grupos",
+                "1",
+                "gastos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 403 no miembro', () => pm.response.to.have.status(403));",
+                  "pm.test('Mensaje de no miembro', () => pm.expect(pm.response.json().error).to.include('miembro'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "GC-03 | Registrar gasto compartido - monto negativo (límite: monto = -1)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer maria"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monto\": -1,\n  \"categoria_id\": 6,\n  \"fecha\": \"2026-05-20\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/grupos/1/gastos",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "grupos",
+                "1",
+                "gastos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 monto invalido', () => pm.response.to.have.status(400));",
+                  "pm.test('Error de monto', () => pm.expect(pm.response.json().error).to.include('inválido'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "GC-04 | Registrar gasto compartido - monto cero (límite: frontera = 0)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer maria"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monto\": 0,\n  \"categoria_id\": 6,\n  \"fecha\": \"2026-05-20\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/grupos/1/gastos",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "grupos",
+                "1",
+                "gastos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 monto cero rechazado', () => pm.response.to.have.status(400));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "GC-05 | Registrar gasto compartido - fecha futura (límite: año 2099)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer maria"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monto\": 50000,\n  \"categoria_id\": 6,\n  \"fecha\": \"2099-01-01\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/grupos/1/gastos",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "grupos",
+                "1",
+                "gastos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 fecha futura', () => pm.response.to.have.status(400));",
+                  "pm.test('Mensaje fecha no permitida', () => pm.expect(pm.response.json().error).to.include('posteriores'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "GC-06 | Registrar gasto - sin categoría (campo obligatorio ausente)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer maria"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monto\": 50000,\n  \"fecha\": \"2026-05-20\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/grupos/1/gastos",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "grupos",
+                "1",
+                "gastos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 categoria obligatoria', () => pm.response.to.have.status(400));",
+                  "pm.test('Error categoria', () => pm.expect(pm.response.json().error).to.include('categoría'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "GC-07 | Listar gastos compartidos - visible para otro miembro (pedro)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer pedro"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/grupos/1/gastos",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "grupos",
+                "1",
+                "gastos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 miembro puede ver gastos', () => pm.response.to.have.status(200));",
+                  "pm.test('Retorna array de gastos', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "GC-08 | Listar gastos - usuario no miembro (clase: acceso denegado 403)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer intruso"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/grupos/1/gastos",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "grupos",
+                "1",
+                "gastos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 403 no miembro no puede listar', () => pm.response.to.have.status(403));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "GC-09 | Listar gastos - grupo inexistente (límite: id = 99999)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer maria"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/grupos/99999/gastos",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "grupos",
+                "99999",
+                "gastos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404 grupo no existe', () => pm.response.to.have.status(404));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "GC-10 | Sin autenticación - acceso denegado (clase: no autenticado 401)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monto\": 50000,\n  \"categoria_id\": 6,\n  \"fecha\": \"2026-05-20\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/grupos/1/gastos",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "grupos",
+                "1",
+                "gastos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 no autenticado', () => pm.response.to.have.status(401));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
