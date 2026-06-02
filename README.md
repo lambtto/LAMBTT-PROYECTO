@@ -73,4 +73,9 @@ Ver: [Arquitectura.md](./Arquitectura.md)
 
 | Integrante     | Rol         | Ítems de la rúbrica a cargo| 
 |----------------|-------------|----------------------------|
-|Paulo Salas Arismendi         |Scrum Master | Diseño del repositorio, historias de usuarios |
+|Paulo Salas Arismendi         |Scrum Master |2.1 y 4.1|
+|Simon Reyes Morales           |Product Owner|1.1 y 3.1|
+|Martín Herrera Duranti        |Developer    |3.1 y 4.1|
+|Felipe Hernández Olivares     |Developer    |1.1, 2.1 y 4.1|
+|Vicente Coiro Martínez        |Developer    |1.1 y 2.1| 
+
