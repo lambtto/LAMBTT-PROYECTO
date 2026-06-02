@@ -1,41 +1,116 @@
-const express = require('express');
-const db      = require('./db');
-const app     = express();
+const express      = require('express');
+const db           = require('./db');
+const swaggerUi    = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
 
+const app = express();
 app.use(express.json());
 
-// GET /cursos
+const swaggerSpec = swaggerJsdoc({
+  definition: {
+    openapi: '3.0.0',
+    info: { title: 'API Cursos', version: '1.0.0',
+            description: 'API para gestionar cursos academicos' }
+  },
+  apis: ['./index.js']
+});
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+/**
+ * @swagger
+ * /cursos:
+ *   get:
+ *     summary: Lista todos los cursos
+ *     responses:
+ *       200:
+ *         description: Array de cursos
+ */
 app.get('/cursos', (req, res) => {
-  const cursos = db.prepare('SELECT * FROM cursos').all();
-  res.json(cursos);
+  res.json(db.prepare('SELECT * FROM cursos').all());
 });
 
-// POST /cursos
+/**
+ * @swagger
+ * /cursos:
+ *   post:
+ *     summary: Crea un nuevo curso
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:     { type: string }
+ *               instructor: { type: string }
+ *               creditos:   { type: integer }
+ *     responses:
+ *       201:
+ *         description: Curso creado
+ */
 app.post('/cursos', (req, res) => {
   const { nombre, instructor, creditos } = req.body;
-  const result = db.prepare(
+  const r = db.prepare(
     'INSERT INTO cursos (nombre, instructor, creditos) VALUES (?, ?, ?)'
   ).run(nombre, instructor, creditos);
-  res.status(201).json({ id: result.lastInsertRowid, nombre, instructor, creditos });
+  res.status(201).json({ id: r.lastInsertRowid, nombre, instructor, creditos });
 });
 
-// PUT /cursos/:id
+/**
+ * @swagger
+ * /cursos/{id}:
+ *   put:
+ *     summary: Modifica un curso
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:     { type: string }
+ *               instructor: { type: string }
+ *               creditos:   { type: integer }
+ *     responses:
+ *       200:
+ *         description: Curso actualizado
+ *       404:
+ *         description: No encontrado
+ */
 app.put('/cursos/:id', (req, res) => {
   const { nombre, instructor, creditos } = req.body;
-  const info = db.prepare(
+  const i = db.prepare(
     'UPDATE cursos SET nombre=?, instructor=?, creditos=? WHERE id=?'
   ).run(nombre, instructor, creditos, req.params.id);
-  if (info.changes === 0) return res.status(404).json({ error: 'Curso no encontrado' });
+  if (i.changes === 0) return res.status(404).json({ error: 'Curso no encontrado' });
   res.json({ mensaje: 'Curso actualizado' });
 });
 
-// DELETE /cursos/:id
+/**
+ * @swagger
+ * /cursos/{id}:
+ *   delete:
+ *     summary: Elimina un curso
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Curso eliminado
+ *       404:
+ *         description: No encontrado
+ */
 app.delete('/cursos/:id', (req, res) => {
-  const info = db.prepare('DELETE FROM cursos WHERE id=?').run(req.params.id);
-  if (info.changes === 0) return res.status(404).json({ error: 'Curso no encontrado' });
+  const i = db.prepare('DELETE FROM cursos WHERE id=?').run(req.params.id);
+  if (i.changes === 0) return res.status(404).json({ error: 'Curso no encontrado' });
   res.json({ mensaje: 'Curso eliminado' });
 });
 
-app.listen(3000, () => {
-  console.log('API corriendo en http://localhost:3000');
-});
+app.listen(3000, () => console.log('API en http://localhost:3000'));
