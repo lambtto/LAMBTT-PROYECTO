@@ -23,7 +23,140 @@ const swaggerSpec = swaggerJsdoc({
   },
   apis: ['./index.js']
 });
+
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// ─────────────────────────────────────────────────────
+// Middleware autenticación simulada
+// ─────────────────────────────────────────────────────
+function authMiddleware(req, res, next) {
+  const auth = req.headers['authorization'];
+  if (!auth || !auth.startsWith('Bearer '))
+    return res.status(401).json({ error: 'No autenticado. Envía un token Bearer.' });
+  req.usuario = auth.replace('Bearer ', '').trim() || 'usuario';
+  next();
+}
+
+// ─────────────────────────────────────────────────────
+// Helpers de validación
+// ─────────────────────────────────────────────────────
+function validarMonto(monto) {
+  if (monto === undefined || monto === null) return 'El monto es obligatorio.';
+  if (typeof monto !== 'number' || monto <= 0)
+    return 'El monto es inválido. Debe ser un número mayor a 0.';
+  return null;
+}
+
+function validarFecha(fecha) {
+  if (!fecha) return 'La fecha es obligatoria.';
+  const hoy = new Date(); hoy.setHours(23, 59, 59, 999);
+  const d = new Date(fecha);
+  if (isNaN(d.getTime())) return 'La fecha no tiene un formato válido (YYYY-MM-DD).';
+  if (d > hoy) return 'No se permiten fechas posteriores al día actual.';
+  return null;
+}
+
+// ═════════════════════════════════════════════════════
+// HU1 — CATEGORÍAS PERSONALES
+// ═════════════════════════════════════════════════════
+
+/**
+ * @swagger
+ * /categorias:
+ *   get:
+ *     summary: "[HU1] Lista todas las categorías"
+ *     security: [{ bearerAuth: [] }]
+ *     responses:
+ *       200: { description: Array de categorías }
+ *       401: { description: No autenticado }
+ */
+app.get('/categorias', authMiddleware, (req, res) => {
+  res.json(db.prepare('SELECT * FROM categorias ORDER BY nombre').all());
+});
+
+/**
+ * @swagger
+ * /categorias:
+ *   post:
+ *     summary: "[HU1] Crea una categoría personalizada"
+ *     security: [{ bearerAuth: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [nombre]
+ *             properties:
+ *               nombre:     { type: string,  example: "Gym" }
+ *               compartida: { type: integer, example: 0, description: "0=personal, 1=compartida" }
+ *     responses:
+ *       201: { description: Categoría creada }
+ *       400: { description: Nombre inválido o duplicado }
+ *       401: { description: No autenticado }
+ */
+app.post('/categorias', authMiddleware, (req, res) => {
+  const { nombre, compartida = 0 } = req.body;
+  if (!nombre || nombre.trim() === '')
+    return res.status(400).json({ error: 'El nombre de la categoría es obligatorio.' });
+  if (db.prepare('SELECT id FROM categorias WHERE nombre = ?').get(nombre.trim()))
+    return res.status(400).json({ error: 'Ya existe una categoría con ese nombre.' });
+  const r = db.prepare('INSERT INTO categorias (nombre, compartida) VALUES (?, ?)').run(nombre.trim(), compartida ? 1 : 0);
+  res.status(201).json({ id: r.lastInsertRowid, nombre: nombre.trim(), compartida: compartida ? 1 : 0 });
+});
+
+/**
+ * @swagger
+ * /categorias/{id}:
+ *   delete:
+ *     summary: "[HU1] Elimina una categoría"
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - { in: path, name: id, required: true, schema: { type: integer } }
+ *     responses:
+ *       200: { description: Categoría eliminada }
+ *       404: { description: No encontrada }
+ *       401: { description: No autenticado }
+ */
+app.delete('/categorias/:id', authMiddleware, (req, res) => {
+  const i = db.prepare('DELETE FROM categorias WHERE id = ?').run(req.params.id);
+  if (i.changes === 0) return res.status(404).json({ error: 'Categoría no encontrada.' });
+  res.json({ mensaje: 'Categoría eliminada.' });
+});
+
+// ═════════════════════════════════════════════════════
+// HU1 — GASTOS PERSONALES
+// ═════════════════════════════════════════════════════
+
+/**
+ * @swagger
+ * /gastos:
+ *   get:
+ *     summary: "[HU1] Historial de gastos del usuario autenticado"
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - { in: query, name: mes,          schema: { type: integer }, description: "Mes 1-12" }
+ *       - { in: query, name: anio,         schema: { type: integer }, description: "Año ej. 2025" }
+ *       - { in: query, name: categoria_id, schema: { type: integer } }
+ *     responses:
+ *       200: { description: Array de gastos }
+ *       401: { description: No autenticado }
+ */
+app.get('/gastos', authMiddleware, (req, res) => {
+  const { mes, anio, categoria_id } = req.query;
+  let sql = `
+    SELECT g.*, c.nombre AS categoria_nombre, c.compartida
+    FROM gastos g
+    LEFT JOIN categorias c ON g.categoria_id = c.id
+    WHERE g.grupo_id IS NULL
+  `;
+  const params = [];
+  if (mes)          { sql += ` AND strftime('%m', g.fecha) = ?`; params.push(String(mes).padStart(2, '0')); }
+  if (anio)         { sql += ` AND strftime('%Y', g.fecha) = ?`; params.push(String(anio)); }
+  if (categoria_id) { sql += ` AND g.categoria_id = ?`;          params.push(categoria_id); }
+  sql += ` ORDER BY g.fecha DESC`;
+  res.json(db.prepare(sql).all(...params));
+});
 
 /**
  * @swagger
