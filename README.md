@@ -68,3 +68,14 @@ Ver: [Arquitectura.md](./Arquitectura.md)
 |Martín Herrera Duranti        |Developer    | Mockups, Diseño del repositorio               |
 |Felipe Hernández Olivares     |Developer    | Arquitectura, Mockups                         |
 |Vicente Coiro Martínez        |Developer    | ReqExtraFuncionales, Mockups                  | 
+
+## Responsabilidades del Equipo en entrega 2
+
+| Integrante     | Rol         | Ítems de la rúbrica a cargo| 
+|----------------|-------------|----------------------------|
+|Paulo Salas Arismendi         |Scrum Master |2.1 y 4.1|
+|Simon Reyes Morales           |Product Owner|1.1 y 3.1|
+|Martín Herrera Duranti        |Developer    |3.1 y 4.1|
+|Felipe Hernández Olivares     |Developer    |1.1, 2.1 y 4.1|
+|Vicente Coiro Martínez        |Developer    |1.1 y 2.1| 
+
