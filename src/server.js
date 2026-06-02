@@ -1,2 +1,8 @@
 const { app } = require('./app');
-app.listen(3000, () => console.log('Servidor backend corriendo en el puerto 3000'));
+
+// Render inyecta el puerto dinámico en la variable process.env.PORT. Si no existe (en local), usa el 3000.
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Servidor backend corriendo en el puerto ${PORT}`);
+});
