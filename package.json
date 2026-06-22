@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/lambtto/LAMBTT-PROYECTO#readme",
   "dependencies": {
-   "express": "^4.19.2",
+    "better-sqlite3": "^12.11.1",
+    "express": "^4.19.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   }
