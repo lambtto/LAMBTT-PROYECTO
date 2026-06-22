@@ -18,13 +18,13 @@ La implementación cubre CRUD completo de gastos personales, filtrado por mes/a�
 
 | Artefacto                          | Ubicación / enlace                                                                                                   |
 |------------------------------------|----------------------------------------------------------------------------------------------------------------------|
-| Modelo de dominio                  | [docs/diagramas/diagramas.md#1-modelo-de-dominio](./docs/diagramas/diagramas.md#1-modelo-de-dominio)               |
-| Diagrama de casos de uso           | [docs/diagramas/diagramas.md#2-diagrama-de-casos-de-uso](./docs/diagramas/diagramas.md#2-diagrama-de-casos-de-uso) |
+| Modelo de dominio                  | [diagramas.md](./diagramas.md)             |
+| Diagrama de casos de uso           | [diagramas.md](./diagramas.md)  |
 | Especificación de HU               | [EspecificacionHU.md](./EspecificacionHU.md)                                                                         |
-| Diagrama de estados                | [docs/diagramas/diagramas.md#3-diagrama-de-estados--gasto](./docs/diagramas/diagramas.md#3-diagrama-de-estados--gasto) |
-| Diagrama de despliegue y comp.     | [docs/diagramas/diagramas.md#4-diagrama-de-despliegue-y-componentes](./docs/diagramas/diagramas.md#4-diagrama-de-despliegue-y-componentes) |
-| Diagrama de componentes            | [docs/diagramas/diagramas.md#5-diagrama-de-componentes-dependencias-e-interfaces](./docs/diagramas/diagramas.md#5-diagrama-de-componentes-dependencias-e-interfaces) |
-| Diagrama de secuencia              | [docs/diagramas/diagramas.md#6-diagrama-de-secuencia--registrar-gasto-personal-hu-01-ca1](./docs/diagramas/diagramas.md#6-diagrama-de-secuencia--registrar-gasto-personal-hu-01-ca1) |
+| Diagrama de estados                | [diagramas.md](./diagramas.md)  |
+| Diagrama de despliegue y comp.     | [diagramas.md](./diagramas.md)  |
+| Diagrama de componentes            | [diagramas.md](./diagramas.md)  |
+| Diagrama de secuencia              | [diagramas.md](./diagramas.md) |
 | Casos de prueba                    | [CasosDePrueba.md](./CasosDePrueba.md)                                                                               |
 | Deuda técnica / code smells        | [DeudaTecnica.md](./DeudaTecnica.md)                                                                                 |
 
