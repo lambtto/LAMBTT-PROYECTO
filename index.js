@@ -1,5 +1,5 @@
 const express      = require('express');
-const db           = require('./db');
+const { pool, initDB } = require('./db');
 const swaggerUi    = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 
@@ -81,8 +81,14 @@ function validarFecha(fecha) {
  *       200: { description: Array de categorías }
  *       401: { description: No autenticado }
  */
-app.get('/categorias', authMiddleware, (req, res) => {
-  res.json(db.prepare('SELECT * FROM categorias ORDER BY nombre').all());
+app.get('/categorias', authMiddleware, async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM categorias ORDER BY nombre');
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
 });
 
 /**
@@ -106,14 +112,25 @@ app.get('/categorias', authMiddleware, (req, res) => {
  *       400: { description: Nombre inválido o duplicado }
  *       401: { description: No autenticado }
  */
-app.post('/categorias', authMiddleware, (req, res) => {
-  const { nombre, compartida = 0 } = req.body;
-  if (!nombre || nombre.trim() === '')
-    return res.status(400).json({ error: 'El nombre de la categoría es obligatorio.' });
-  if (db.prepare('SELECT id FROM categorias WHERE nombre = ?').get(nombre.trim()))
-    return res.status(400).json({ error: 'Ya existe una categoría con ese nombre.' });
-  const r = db.prepare('INSERT INTO categorias (nombre, compartida) VALUES (?, ?)').run(nombre.trim(), compartida ? 1 : 0);
-  res.status(201).json({ id: r.lastInsertRowid, nombre: nombre.trim(), compartida: compartida ? 1 : 0 });
+app.post('/categorias', authMiddleware, async (req, res) => {
+  try {
+    const { nombre, compartida = 0 } = req.body;
+    if (!nombre || nombre.trim() === '')
+      return res.status(400).json({ error: 'El nombre de la categoría es obligatorio.' });
+    
+    const checkName = await pool.query('SELECT id FROM categorias WHERE nombre = $1', [nombre.trim()]);
+    if (checkName.rows.length > 0)
+      return res.status(400).json({ error: 'Ya existe una categoría con ese nombre.' });
+    
+    const r = await pool.query(
+      'INSERT INTO categorias (nombre, compartida) VALUES ($1, $2) RETURNING id',
+      [nombre.trim(), compartida ? 1 : 0]
+    );
+    res.status(201).json({ id: r.rows[0].id, nombre: nombre.trim(), compartida: compartida ? 1 : 0 });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
 });
 
 /**
@@ -129,10 +146,15 @@ app.post('/categorias', authMiddleware, (req, res) => {
  *       404: { description: No encontrada }
  *       401: { description: No autenticado }
  */
-app.delete('/categorias/:id', authMiddleware, (req, res) => {
-  const i = db.prepare('DELETE FROM categorias WHERE id = ?').run(req.params.id);
-  if (i.changes === 0) return res.status(404).json({ error: 'Categoría no encontrada.' });
-  res.json({ mensaje: 'Categoría eliminada.' });
+app.delete('/categorias/:id', authMiddleware, async (req, res) => {
+  try {
+    const i = await pool.query('DELETE FROM categorias WHERE id = $1', [req.params.id]);
+    if (i.rowCount === 0) return res.status(404).json({ error: 'Categoría no encontrada.' });
+    res.json({ mensaje: 'Categoría eliminada.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
 });
 
 // ═════════════════════════════════════════════════════
@@ -153,20 +175,40 @@ app.delete('/categorias/:id', authMiddleware, (req, res) => {
  *       200: { description: Array de gastos }
  *       401: { description: No autenticado }
  */
-app.get('/gastos', authMiddleware, (req, res) => {
-  const { mes, anio, categoria_id } = req.query;
-  let sql = `
-    SELECT g.*, c.nombre AS categoria_nombre, c.compartida
-    FROM gastos g
-    LEFT JOIN categorias c ON g.categoria_id = c.id
-    WHERE g.grupo_id IS NULL AND g.usuario = ?
-  `;
-  const params = [req.usuario];
-  if (mes)          { sql += ` AND strftime('%m', g.fecha) = ?`; params.push(String(mes).padStart(2, '0')); }
-  if (anio)         { sql += ` AND strftime('%Y', g.fecha) = ?`; params.push(String(anio)); }
-  if (categoria_id) { sql += ` AND g.categoria_id = ?`;          params.push(categoria_id); }
-  sql += ` ORDER BY g.fecha DESC`;
-  res.json(db.prepare(sql).all(...params));
+app.get('/gastos', authMiddleware, async (req, res) => {
+  try {
+    const { mes, anio, categoria_id } = req.query;
+    let sql = `
+      SELECT g.*, c.nombre AS categoria_nombre, c.compartida
+      FROM gastos g
+      LEFT JOIN categorias c ON g.categoria_id = c.id
+      WHERE g.grupo_id IS NULL AND g.usuario = $1
+    `;
+    const params = [req.usuario];
+    let paramIndex = 2;
+    if (mes) {
+      sql += ` AND substring(g.fecha from 6 for 2) = $${paramIndex}`;
+      params.push(String(mes).padStart(2, '0'));
+      paramIndex++;
+    }
+    if (anio) {
+      sql += ` AND substring(g.fecha from 1 for 4) = $${paramIndex}`;
+      params.push(String(anio));
+      paramIndex++;
+    }
+    if (categoria_id) {
+      sql += ` AND g.categoria_id = $${paramIndex}`;
+      params.push(categoria_id);
+      paramIndex++;
+    }
+    sql += ` ORDER BY g.fecha DESC`;
+    
+    const result = await pool.query(sql, params);
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
 });
 
 /**
@@ -182,14 +224,19 @@ app.get('/gastos', authMiddleware, (req, res) => {
  *       404: { description: No encontrado }
  *       401: { description: No autenticado }
  */
-app.get('/gastos/:id', authMiddleware, (req, res) => {
-  const g = db.prepare(`
-    SELECT g.*, c.nombre AS categoria_nombre
-    FROM gastos g LEFT JOIN categorias c ON g.categoria_id = c.id
-    WHERE g.id = ? AND g.usuario = ? AND g.grupo_id IS NULL
-  `).get(req.params.id, req.usuario);
-  if (!g) return res.status(404).json({ error: 'Gasto no encontrado.' });
-  res.json(g);
+app.get('/gastos/:id', authMiddleware, async (req, res) => {
+  try {
+    const g = await pool.query(`
+      SELECT g.*, c.nombre AS categoria_nombre
+      FROM gastos g LEFT JOIN categorias c ON g.categoria_id = c.id
+      WHERE g.id = $1 AND g.usuario = $2 AND g.grupo_id IS NULL
+    `, [req.params.id, req.usuario]);
+    if (g.rows.length === 0) return res.status(404).json({ error: 'Gasto no encontrado.' });
+    res.json(g.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
 });
 
 /**
@@ -216,27 +263,34 @@ app.get('/gastos/:id', authMiddleware, (req, res) => {
  *       400: { description: Datos inválidos }
  *       401: { description: No autenticado }
  */
-app.post('/gastos', authMiddleware, (req, res) => {
-  const { monto, categoria_id, fecha, descripcion, metodo_pago } = req.body;
+app.post('/gastos', authMiddleware, async (req, res) => {
+  try {
+    const { monto, categoria_id, fecha, descripcion, metodo_pago } = req.body;
 
-  const errMonto = validarMonto(monto);
-  if (errMonto) return res.status(400).json({ error: errMonto });
+    const errMonto = validarMonto(monto);
+    if (errMonto) return res.status(400).json({ error: errMonto });
 
-  const errFecha = validarFecha(fecha);
-  if (errFecha) return res.status(400).json({ error: errFecha });
+    const errFecha = validarFecha(fecha);
+    if (errFecha) return res.status(400).json({ error: errFecha });
 
-  if (!categoria_id)
-    return res.status(400).json({ error: 'La categoría es obligatoria.' });
+    if (!categoria_id)
+      return res.status(400).json({ error: 'La categoría es obligatoria.' });
 
-  if (!db.prepare('SELECT id FROM categorias WHERE id = ?').get(categoria_id))
-    return res.status(400).json({ error: 'La categoría indicada no existe.' });
+    const checkCat = await pool.query('SELECT id FROM categorias WHERE id = $1', [categoria_id]);
+    if (checkCat.rows.length === 0)
+      return res.status(400).json({ error: 'La categoría indicada no existe.' });
 
-  const r = db.prepare(`
-    INSERT INTO gastos (monto, categoria_id, fecha, descripcion, metodo_pago, usuario)
-    VALUES (?, ?, ?, ?, ?, ?)
-  `).run(monto, categoria_id, fecha, descripcion || null, metodo_pago || null, req.usuario);
+    const r = await pool.query(`
+      INSERT INTO gastos (monto, categoria_id, fecha, descripcion, metodo_pago, usuario)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING id
+    `, [monto, categoria_id, fecha, descripcion || null, metodo_pago || null, req.usuario]);
 
-  res.status(201).json({ id: r.lastInsertRowid, monto, categoria_id, fecha, descripcion: descripcion || null, metodo_pago: metodo_pago || null });
+    res.status(201).json({ id: r.rows[0].id, monto, categoria_id, fecha, descripcion: descripcion || null, metodo_pago: metodo_pago || null });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
 });
 
 /**
@@ -265,63 +319,75 @@ app.post('/gastos', authMiddleware, (req, res) => {
  *       404: { description: No encontrado }
  *       401: { description: No autenticado }
  */
-app.put('/gastos/:id', authMiddleware, (req, res) => {
-  const { monto, categoria_id, fecha, descripcion, metodo_pago } = req.body;
+app.put('/gastos/:id', authMiddleware, async (req, res) => {
+  try {
+    const { monto, categoria_id, fecha, descripcion, metodo_pago } = req.body;
 
-  const gasto = db.prepare('SELECT * FROM gastos WHERE id = ?').get(req.params.id);
-  if (!gasto || gasto.usuario !== req.usuario || gasto.grupo_id !== null) {
-    return res.status(404).json({ error: 'Gasto no encontrado.' });
-  }
-
-  const fieldsToUpdate = [];
-  const params = [];
-
-  if ('monto' in req.body) {
-    const errMonto = validarMonto(monto);
-    if (errMonto) return res.status(400).json({ error: errMonto });
-    fieldsToUpdate.push('monto = ?');
-    params.push(monto);
-  }
-
-  if ('fecha' in req.body) {
-    const errFecha = validarFecha(fecha);
-    if (errFecha) return res.status(400).json({ error: errFecha });
-    fieldsToUpdate.push('fecha = ?');
-    params.push(fecha);
-  }
-
-  if ('categoria_id' in req.body) {
-    if (!categoria_id) {
-      return res.status(400).json({ error: 'La categoría es obligatoria.' });
+    const resGasto = await pool.query('SELECT * FROM gastos WHERE id = $1', [req.params.id]);
+    const gasto = resGasto.rows[0];
+    if (!gasto || gasto.usuario !== req.usuario || gasto.grupo_id !== null) {
+      return res.status(404).json({ error: 'Gasto no encontrado.' });
     }
-    if (!db.prepare('SELECT id FROM categorias WHERE id = ?').get(categoria_id)) {
-      return res.status(400).json({ error: 'La categoría indicada no existe.' });
+
+    const fieldsToUpdate = [];
+    const params = [];
+    let index = 1;
+
+    if ('monto' in req.body) {
+      const errMonto = validarMonto(monto);
+      if (errMonto) return res.status(400).json({ error: errMonto });
+      fieldsToUpdate.push(`monto = $${index}`);
+      params.push(monto);
+      index++;
     }
-    fieldsToUpdate.push('categoria_id = ?');
-    params.push(categoria_id);
+
+    if ('fecha' in req.body) {
+      const errFecha = validarFecha(fecha);
+      if (errFecha) return res.status(400).json({ error: errFecha });
+      fieldsToUpdate.push(`fecha = $${index}`);
+      params.push(fecha);
+      index++;
+    }
+
+    if ('categoria_id' in req.body) {
+      if (!categoria_id) {
+        return res.status(400).json({ error: 'La categoría es obligatoria.' });
+      }
+      const checkCat = await pool.query('SELECT id FROM categorias WHERE id = $1', [categoria_id]);
+      if (checkCat.rows.length === 0) {
+        return res.status(400).json({ error: 'La categoría indicada no existe.' });
+      }
+      fieldsToUpdate.push(`categoria_id = $${index}`);
+      params.push(categoria_id);
+      index++;
+    }
+
+    if ('descripcion' in req.body) {
+      fieldsToUpdate.push(`descripcion = $${index}`);
+      params.push(descripcion === '' || descripcion === null ? null : descripcion);
+      index++;
+    }
+
+    if ('metodo_pago' in req.body) {
+      fieldsToUpdate.push(`metodo_pago = $${index}`);
+      params.push(metodo_pago === '' || metodo_pago === null ? null : metodo_pago);
+      index++;
+    }
+
+    if (fieldsToUpdate.length === 0) {
+      return res.status(400).json({ error: 'Debe enviar al menos un campo para actualizar.' });
+    }
+
+    params.push(req.params.id);
+    await pool.query(`
+      UPDATE gastos SET ${fieldsToUpdate.join(', ')} WHERE id = $${index}
+    `, params);
+
+    res.json({ mensaje: 'Gasto actualizado correctamente.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
   }
-
-  if ('descripcion' in req.body) {
-    fieldsToUpdate.push('descripcion = ?');
-    params.push(descripcion === '' || descripcion === null ? null : descripcion);
-  }
-
-  if ('metodo_pago' in req.body) {
-    fieldsToUpdate.push('metodo_pago = ?');
-    params.push(metodo_pago === '' || metodo_pago === null ? null : metodo_pago);
-  }
-
-  if (fieldsToUpdate.length === 0) {
-    return res.status(400).json({ error: 'Debe enviar al menos un campo para actualizar.' });
-  }
-
-  params.push(req.params.id);
-
-  db.prepare(`
-    UPDATE gastos SET ${fieldsToUpdate.join(', ')} WHERE id = ?
-  `).run(...params);
-
-  res.json({ mensaje: 'Gasto actualizado correctamente.' });
 });
 
 /**
@@ -337,14 +403,20 @@ app.put('/gastos/:id', authMiddleware, (req, res) => {
  *       404: { description: No encontrado }
  *       401: { description: No autenticado }
  */
-app.delete('/gastos/:id', authMiddleware, (req, res) => {
-  const gasto = db.prepare('SELECT * FROM gastos WHERE id = ?').get(req.params.id);
-  if (!gasto || gasto.usuario !== req.usuario || gasto.grupo_id !== null) {
-    return res.status(404).json({ error: 'Gasto no encontrado.' });
-  }
+app.delete('/gastos/:id', authMiddleware, async (req, res) => {
+  try {
+    const resGasto = await pool.query('SELECT * FROM gastos WHERE id = $1', [req.params.id]);
+    const gasto = resGasto.rows[0];
+    if (!gasto || gasto.usuario !== req.usuario || gasto.grupo_id !== null) {
+      return res.status(404).json({ error: 'Gasto no encontrado.' });
+    }
 
-  db.prepare('DELETE FROM gastos WHERE id = ?').run(req.params.id);
-  res.json({ mensaje: 'Gasto eliminado correctamente.' });
+    await pool.query('DELETE FROM gastos WHERE id = $1', [req.params.id]);
+    res.json({ mensaje: 'Gasto eliminado correctamente.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
 });
 
 // ═════════════════════════════════════════════════════
@@ -361,12 +433,19 @@ app.delete('/gastos/:id', authMiddleware, (req, res) => {
  *       200: { description: Array de grupos }
  *       401: { description: No autenticado }
  */
-app.get('/grupos', authMiddleware, (req, res) => {
-  const grupos = db.prepare('SELECT * FROM grupos').all();
-  grupos.forEach(g => {
-    g.miembros = db.prepare('SELECT usuario FROM grupo_miembros WHERE grupo_id = ?').all(g.id).map(m => m.usuario);
-  });
-  res.json(grupos);
+app.get('/grupos', authMiddleware, async (req, res) => {
+  try {
+    const resGrupos = await pool.query('SELECT * FROM grupos');
+    const grupos = resGrupos.rows;
+    for (const g of grupos) {
+      const resMiembros = await pool.query('SELECT usuario FROM grupo_miembros WHERE grupo_id = $1', [g.id]);
+      g.miembros = resMiembros.rows.map(m => m.usuario);
+    }
+    res.json(grupos);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
 });
 
 /**
@@ -389,17 +468,25 @@ app.get('/grupos', authMiddleware, (req, res) => {
  *       400: { description: Nombre inválido o duplicado }
  *       401: { description: No autenticado }
  */
-app.post('/grupos', authMiddleware, (req, res) => {
-  const { nombre } = req.body;
-  if (!nombre || nombre.trim() === '')
-    return res.status(400).json({ error: 'El nombre del grupo es obligatorio.' });
-  if (db.prepare('SELECT id FROM grupos WHERE nombre = ?').get(nombre.trim()))
-    return res.status(400).json({ error: 'Ya existe un grupo con ese nombre.' });
+app.post('/grupos', authMiddleware, async (req, res) => {
+  try {
+    const { nombre } = req.body;
+    if (!nombre || nombre.trim() === '')
+      return res.status(400).json({ error: 'El nombre del grupo es obligatorio.' });
+    
+    const checkName = await pool.query('SELECT id FROM grupos WHERE nombre = $1', [nombre.trim()]);
+    if (checkName.rows.length > 0)
+      return res.status(400).json({ error: 'Ya existe un grupo con ese nombre.' });
 
-  const r = db.prepare('INSERT INTO grupos (nombre) VALUES (?)').run(nombre.trim());
-  // El creador se agrega automáticamente como miembro
-  db.prepare('INSERT OR IGNORE INTO grupo_miembros (grupo_id, usuario) VALUES (?, ?)').run(r.lastInsertRowid, req.usuario);
-  res.status(201).json({ id: r.lastInsertRowid, nombre: nombre.trim(), miembros: [req.usuario] });
+    const r = await pool.query('INSERT INTO grupos (nombre) VALUES ($1) RETURNING id', [nombre.trim()]);
+    const grupoId = r.rows[0].id;
+    // El creador se agrega automáticamente como miembro
+    await pool.query('INSERT INTO grupo_miembros (grupo_id, usuario) VALUES ($1, $2) ON CONFLICT (grupo_id, usuario) DO NOTHING', [grupoId, req.usuario]);
+    res.status(201).json({ id: grupoId, nombre: nombre.trim(), miembros: [req.usuario] });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
 });
 
 /**
@@ -425,17 +512,25 @@ app.post('/grupos', authMiddleware, (req, res) => {
  *       404: { description: Grupo no encontrado }
  *       401: { description: No autenticado }
  */
-app.post('/grupos/:id/miembros', authMiddleware, (req, res) => {
-  const { usuario } = req.body;
-  if (!usuario || usuario.trim() === '')
-    return res.status(400).json({ error: 'El nombre de usuario es obligatorio.' });
-  if (!db.prepare('SELECT id FROM grupos WHERE id = ?').get(req.params.id))
-    return res.status(404).json({ error: 'Grupo no encontrado.' });
+app.post('/grupos/:id/miembros', authMiddleware, async (req, res) => {
   try {
-    db.prepare('INSERT INTO grupo_miembros (grupo_id, usuario) VALUES (?, ?)').run(req.params.id, usuario.trim());
-    res.status(201).json({ mensaje: `Usuario "${usuario.trim()}" agregado al grupo.` });
-  } catch {
-    res.status(400).json({ error: 'El usuario ya es miembro de este grupo.' });
+    const { usuario } = req.body;
+    if (!usuario || usuario.trim() === '')
+      return res.status(400).json({ error: 'El nombre de usuario es obligatorio.' });
+    
+    const checkG = await pool.query('SELECT id FROM grupos WHERE id = $1', [req.params.id]);
+    if (checkG.rows.length === 0)
+      return res.status(404).json({ error: 'Grupo no encontrado.' });
+    
+    try {
+      await pool.query('INSERT INTO grupo_miembros (grupo_id, usuario) VALUES ($1, $2)', [req.params.id, usuario.trim()]);
+      res.status(201).json({ mensaje: `Usuario "${usuario.trim()}" agregado al grupo.` });
+    } catch (err) {
+      res.status(400).json({ error: 'El usuario ya es miembro de este grupo.' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
   }
 });
 
@@ -459,27 +554,43 @@ app.post('/grupos/:id/miembros', authMiddleware, (req, res) => {
  *       404: { description: Grupo no encontrado }
  *       401: { description: No autenticado }
  */
-app.get('/grupos/:id/gastos', authMiddleware, (req, res) => {
-  if (!db.prepare('SELECT id FROM grupos WHERE id = ?').get(req.params.id))
-    return res.status(404).json({ error: 'Grupo no encontrado.' });
+app.get('/grupos/:id/gastos', authMiddleware, async (req, res) => {
+  try {
+    const checkG = await pool.query('SELECT id FROM grupos WHERE id = $1', [req.params.id]);
+    if (checkG.rows.length === 0)
+      return res.status(404).json({ error: 'Grupo no encontrado.' });
 
-  const esMiembro = db.prepare('SELECT id FROM grupo_miembros WHERE grupo_id = ? AND usuario = ?').get(req.params.id, req.usuario);
-  if (!esMiembro)
-    return res.status(403).json({ error: 'No eres miembro de este grupo.' });
+    const esMiembroRes = await pool.query('SELECT id FROM grupo_miembros WHERE grupo_id = $1 AND usuario = $2', [req.params.id, req.usuario]);
+    if (esMiembroRes.rows.length === 0)
+      return res.status(403).json({ error: 'No eres miembro de este grupo.' });
 
-  const { mes, anio } = req.query;
-  let sql = `
-    SELECT g.*, c.nombre AS categoria_nombre, c.compartida, g.usuario AS registrado_por
-    FROM gastos g
-    LEFT JOIN categorias c ON g.categoria_id = c.id
-    WHERE g.grupo_id = ?
-  `;
-  const params = [req.params.id];
-  if (mes)  { sql += ` AND strftime('%m', g.fecha) = ?`; params.push(String(mes).padStart(2, '0')); }
-  if (anio) { sql += ` AND strftime('%Y', g.fecha) = ?`; params.push(String(anio)); }
-  sql += ` ORDER BY g.fecha DESC`;
+    const { mes, anio } = req.query;
+    let sql = `
+      SELECT g.*, c.nombre AS categoria_nombre, c.compartida, g.usuario AS registrado_por
+      FROM gastos g
+      LEFT JOIN categorias c ON g.categoria_id = c.id
+      WHERE g.grupo_id = $1
+    `;
+    const params = [req.params.id];
+    let paramIndex = 2;
+    if (mes) {
+      sql += ` AND substring(g.fecha from 6 for 2) = $${paramIndex}`;
+      params.push(String(mes).padStart(2, '0'));
+      paramIndex++;
+    }
+    if (anio) {
+      sql += ` AND substring(g.fecha from 1 for 4) = $${paramIndex}`;
+      params.push(String(anio));
+      paramIndex++;
+    }
+    sql += ` ORDER BY g.fecha DESC`;
 
-  res.json(db.prepare(sql).all(...params));
+    const result = await pool.query(sql, params);
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
 });
 
 /**
@@ -510,46 +621,54 @@ app.get('/grupos/:id/gastos', authMiddleware, (req, res) => {
  *       404: { description: Grupo no encontrado }
  *       401: { description: No autenticado }
  */
-app.post('/grupos/:id/gastos', authMiddleware, (req, res) => {
-  const { monto, categoria_id, fecha, descripcion, metodo_pago } = req.body;
+app.post('/grupos/:id/gastos', authMiddleware, async (req, res) => {
+  try {
+    const { monto, categoria_id, fecha, descripcion, metodo_pago } = req.body;
 
-  if (!db.prepare('SELECT id FROM grupos WHERE id = ?').get(req.params.id))
-    return res.status(404).json({ error: 'Grupo no encontrado.' });
+    const checkG = await pool.query('SELECT id FROM grupos WHERE id = $1', [req.params.id]);
+    if (checkG.rows.length === 0)
+      return res.status(404).json({ error: 'Grupo no encontrado.' });
 
-  const esMiembro = db.prepare('SELECT id FROM grupo_miembros WHERE grupo_id = ? AND usuario = ?').get(req.params.id, req.usuario);
-  if (!esMiembro)
-    return res.status(403).json({ error: 'No eres miembro de este grupo.' });
+    const esMiembroRes = await pool.query('SELECT id FROM grupo_miembros WHERE grupo_id = $1 AND usuario = $2', [req.params.id, req.usuario]);
+    if (esMiembroRes.rows.length === 0)
+      return res.status(403).json({ error: 'No eres miembro de este grupo.' });
 
-  const errMonto = validarMonto(monto);
-  if (errMonto) return res.status(400).json({ error: errMonto });
+    const errMonto = validarMonto(monto);
+    if (errMonto) return res.status(400).json({ error: errMonto });
 
-  const errFecha = validarFecha(fecha);
-  if (errFecha) return res.status(400).json({ error: errFecha });
+    const errFecha = validarFecha(fecha);
+    if (errFecha) return res.status(400).json({ error: errFecha });
 
-  if (!categoria_id)
-    return res.status(400).json({ error: 'La categoría es obligatoria.' });
+    if (!categoria_id)
+      return res.status(400).json({ error: 'La categoría es obligatoria.' });
 
-  const categoria = db.prepare('SELECT * FROM categorias WHERE id = ?').get(categoria_id);
-  if (!categoria)
-    return res.status(400).json({ error: 'La categoría indicada no existe.' });
+    const catRes = await pool.query('SELECT * FROM categorias WHERE id = $1', [categoria_id]);
+    const categoria = catRes.rows[0];
+    if (!categoria)
+      return res.status(400).json({ error: 'La categoría indicada no existe.' });
 
-  const r = db.prepare(`
-    INSERT INTO gastos (monto, categoria_id, fecha, descripcion, metodo_pago, grupo_id, usuario)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-  `).run(monto, categoria_id, fecha, descripcion || null, metodo_pago || null, req.params.id, req.usuario);
+    const r = await pool.query(`
+      INSERT INTO gastos (monto, categoria_id, fecha, descripcion, metodo_pago, grupo_id, usuario)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      RETURNING id
+    `, [monto, categoria_id, fecha, descripcion || null, metodo_pago || null, req.params.id, req.usuario]);
 
-  res.status(201).json({
-    id: r.lastInsertRowid,
-    monto,
-    categoria_id,
-    categoria_nombre: categoria.nombre,
-    fecha,
-    descripcion: descripcion || null,
-    metodo_pago: metodo_pago || null,
-    grupo_id: Number(req.params.id),
-    registrado_por: req.usuario,
-    visible_para_grupo: true
-  });
+    res.status(201).json({
+      id: r.rows[0].id,
+      monto,
+      categoria_id,
+      categoria_nombre: categoria.nombre,
+      fecha,
+      descripcion: descripcion || null,
+      metodo_pago: metodo_pago || null,
+      grupo_id: Number(req.params.id),
+      registrado_por: req.usuario,
+      visible_para_grupo: true
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
 });
 
 /**
@@ -567,17 +686,33 @@ app.post('/grupos/:id/gastos', authMiddleware, (req, res) => {
  *       404: { description: No encontrado }
  *       401: { description: No autenticado }
  */
-app.delete('/grupos/:id/gastos/:gastoId', authMiddleware, (req, res) => {
-  if (!db.prepare('SELECT id FROM grupos WHERE id = ?').get(req.params.id))
-    return res.status(404).json({ error: 'Grupo no encontrado.' });
+app.delete('/grupos/:id/gastos/:gastoId', authMiddleware, async (req, res) => {
+  try {
+    const checkG = await pool.query('SELECT id FROM grupos WHERE id = $1', [req.params.id]);
+    if (checkG.rows.length === 0)
+      return res.status(404).json({ error: 'Grupo no encontrado.' });
 
-  const esMiembro = db.prepare('SELECT id FROM grupo_miembros WHERE grupo_id = ? AND usuario = ?').get(req.params.id, req.usuario);
-  if (!esMiembro)
-    return res.status(403).json({ error: 'No eres miembro de este grupo.' });
+    const esMiembroRes = await pool.query('SELECT id FROM grupo_miembros WHERE grupo_id = $1 AND usuario = $2', [req.params.id, req.usuario]);
+    if (esMiembroRes.rows.length === 0)
+      return res.status(403).json({ error: 'No eres miembro de este grupo.' });
 
-  const i = db.prepare('DELETE FROM gastos WHERE id = ? AND grupo_id = ?').run(req.params.gastoId, req.params.id);
-  if (i.changes === 0) return res.status(404).json({ error: 'Gasto no encontrado en este grupo.' });
-  res.json({ mensaje: 'Gasto compartido eliminado.' });
+    const i = await pool.query('DELETE FROM gastos WHERE id = $1 AND grupo_id = $2', [req.params.gastoId, req.params.id]);
+    if (i.rowCount === 0) return res.status(404).json({ error: 'Gasto no encontrado en este grupo.' });
+    res.json({ mensaje: 'Gasto compartido eliminado.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
 });
 
-app.listen(3000, () => console.log('API Gastos v2 en http://localhost:3000'));
+const PORT = process.env.PORT || 3000;
+async function startServer() {
+  try {
+    await initDB();
+    app.listen(PORT, () => console.log(`API Gastos v2 en http://localhost:${PORT}`));
+  } catch (error) {
+    console.error('Error al inicializar la base de datos o el servidor:', error);
+    process.exit(1);
+  }
+}
+startServer();
