@@ -1,0 +1,6 @@
+node_modules/
+datos.db
+gastos.db
+*.db
+*.db-journal
+*.db-wal
