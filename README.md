@@ -155,11 +155,11 @@ Ver: [Arquitectura.md](./Arquitectura.md)
 
 | Integrante               | Rol(es)          | Ítems de la rúbrica a cargo                              |
 |--------------------------|------------------|----------------------------------------------------------|
-| Paulo Salas Arismendi    | Scrum Master     | 1.1 HU completa, 2.2 Casos de uso                        |
-| Simon Reyes Morales      | Arquitecto       | 3.1 Despliegue y componentes, 3.2 Componentes, 3.3 Secuencia |
-| Martín Herrera Duranti   | Developer        | 1.2 Instalación y ejecución, 1.3 GitHub workflow         |
-| Felipe Hernández Olivares| Technical Lead   | 4.1 Casos de prueba, 5.1 Deuda técnica                   |
-| Vicente Coiro Martínez   | QA               | 2.1 Modelo de dominio, 2.3 Especificación HU, 2.4 Diagrama de estados |
+| Paulo Salas Arismendi    | Developer     |      5,1                |
+| Simon Reyes Morales      | Scrum Master, Arquitecto        | 1,1 , 2,2, 3,1|
+| Martín Herrera Duranti   | Quality Assurance, Bonus       |    4,1, 2,4, 1,2   |
+| Felipe Hernández Olivares| Scrum Master, Arquitecto   |    1,3 2,3, 3,2           |
+| Vicente Coiro Martínez   | Quality Assurance, Bonus               |4,1 , 2,1, 3,3 |
 
 ## Bonus
 
